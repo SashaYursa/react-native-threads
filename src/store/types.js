@@ -1,0 +1,5 @@
+export const LOAD_THREADS = 'LOAD_THREADS'
+export const TOGGLE_BOOKMARKED = 'TOGGLE_BOOKMARKED'
+export const REMOVE_THREAD = 'REMOVE_THREAD'
+export const ADD_POST = 'ADD_POST'
+export const LOAD_USER = 'LOAD_USER'
