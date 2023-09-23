@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import Users from '../screens/Users'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styled from 'styled-components'
+import Login from '../screens/Login'
 
 const Navigation = createBottomTabNavigator()
 
@@ -26,6 +27,11 @@ export default () => {
                     headerShown: false,
                     tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
                     }} component={Users}/>
+
+                <Navigation.Screen name='Логін' options={{
+                    headerShown: false,
+                    tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
+                    }} component={Login}/>
             </Navigation.Navigator>
         </NavigationContainer>
     )

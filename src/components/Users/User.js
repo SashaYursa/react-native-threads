@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity} from 'react-native'
 import React from 'react'
 import styled from 'styled-components'
-import { GRAY_TEXT } from '../../constants'
+import { GRAY_TEXT, USER_IMAGE_URL } from '../../constants'
 const User = ({user}) => {
     const isSubscribed = user.isSubscribed
      ? {
@@ -15,11 +15,11 @@ const User = ({user}) => {
 
   return (
     <UserItem>
-        <UserImage source={{uri: user.image}}/>
+        <UserImage source={{uri: USER_IMAGE_URL + user.image}}/>
         <UserInfoContainer style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3'}}>
             <UserInfo>
                 <UserName>{user.name}</UserName>
-                <UserSubscribers>{user.subscribers} подпищиков</UserSubscribers>
+                <UserSubscribers>{user.subscribers}5 подпищиков</UserSubscribers>
             </UserInfo>
             <SubscribeButton><Text style={isSubscribed.style}>{isSubscribed.text}</Text></SubscribeButton>
         </UserInfoContainer>
@@ -30,7 +30,6 @@ const User = ({user}) => {
 const UserItem = styled.TouchableOpacity`
 display: flex;
 flex-direction: row;
-//padding: 0;
 margin: 10px 0 0 10px;
 
 `

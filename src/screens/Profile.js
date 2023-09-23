@@ -1,10 +1,11 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { lazy, useEffect } from 'react'
 import { GRAY_TEXT, USER_IMAGE_URL } from '../constants'
 import styled from 'styled-components'
 import Thread from '../components/Thread/Thread'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadUser } from '../store/actions/UserActions'
+import { ActivityIndicator } from 'react-native-paper'
 const userData = {
   id: 1234,
   name: 'Alex',
@@ -21,20 +22,32 @@ const userData = {
 const Profile = () => {
   const dispatch = useDispatch();
   useEffect(()=>{
-    dispatch(loadUser(1))
+    dispatch(loadUser(3))
   }, [dispatch]);
 
   const user = useSelector(state=> state.user.user)
-  console.log(user);
-  const threads = user.threads.map(thread => ({
-    ...thread,
-    author_name: user.name,
-    author_image: user.image,
-    isSubscribed: true,
-  }));
-  const loading = useSelector(state=> state.user.loading)
-  return (
-    <ScrollView>
+  let threads = user.threads;
+  if(user.threads > 1){
+    threads = user.threads.map(thread => ({
+      ...thread,
+      author_name: user.name,
+      author_image: user.image,
+      isSubscribed: true,
+    }));
+  }else if(user.threads === 1){
+    threads = [{
+      ...threads[0],
+      author_name: user.name,
+      author_image: user.image,
+      isSubscribed: true,
+    }]
+  }
+  const loading = useSelector(state => state.user.loading)
+  
+  return loading 
+  ? ( <ActivityIndicator size={'large'}/> ) 
+  : (
+    <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
     <Container>
       <UserInfoContainer>
       <UserInfo>
@@ -54,8 +67,11 @@ const Profile = () => {
           <ActionText>Поширити профіль</ActionText>
         </ActionButton>
       </ActionsContainer>
-      <View>
-        {threads.map(thread=> <Thread key={thread.id} thread={thread}/>)}
+      <View style={{flex: 1, backgroundColor: 'red', flexDirection: 'column'}}>
+        {threads.lenght > 0 
+        ? threads.map(thread=> <Thread key={thread.id} thread={thread}/>)
+        : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
+      }
       </View>
     </Container>
     </ScrollView>
@@ -93,6 +109,7 @@ const UserImage = styled.Image`
 width: 70px;
 height: 70px;
 border-radius: 45px;
+background-color: #000;
 `
 const Name = styled.Text`
 font-size: 26px;
