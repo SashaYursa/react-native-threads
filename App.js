@@ -9,20 +9,15 @@ import store from './src/store';
 
 export default function App() {
   const [isLoading, setLoading] = useState(true);
-  SplashScreen.preventAutoHideAsync()
-  .catch(console.warn);
+  SplashScreen.preventAutoHideAsync();
   useEffect(()=>{
     const l = async () => {
       await load(SplashScreen);
       setLoading(false);
     }
     l();
-  }, [])
-  const onLayoutRootView = useCallback(async () => {
-    if (isLoading) {
-      await SplashScreen.hideAsync();
-    }
-  }, [isLoading]);
+  }, []);
+
   return isLoading
   ? (
     null

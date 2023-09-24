@@ -7,13 +7,7 @@ import User from '../components/Users/User';
 import { loadUsers } from '../store/actions/usersActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
-// const users = [
-//   {id: 12, name: "Alex", subscribers: 143, isSubscribed: true, image: 'https://lh3.googleusercontent.com/ffSdVkK55wv9buGr9i4g1YCp1BpYo6u5ctpR3vcMdHGqLSvlRTQcz-m4IKtOriVFM3nSH0kyOnWKC5vx=w544-h544-l90-rj'},
-//   {id: 154, name: "Dasha", subscribers: 890, isSubscribed: false, image: 'https://lh3.googleusercontent.com/90oX4HFegm33qgQCCNXHeSrWa7HUuyWtnAF8bep_nGKWP-yGLS5vW1S2GWKx04RwZoHvnzYXTiRak0U=w544-h544-l90-rj'},
-//   {id: 16675, name: "_Jazhevika", subscribers: 54365, isSubscribed: false, image: 'https://lh3.googleusercontent.com/0HmJl4UyXLEK44n1EUA2NZxqf8dDVqnBs7FDBtShUy3v-yVz3ZePCfpIxuio-aXh13unRvnNvofqdQME=w544-h544-l90-rj'},
-//   {id: 17, name: "Yan", subscribers: 123123, isSubscribed: false, image: 'https://lh3.googleusercontent.com/ffSdVkK55wv9buGr9i4g1YCp1BpYo6u5ctpR3vcMdHGqLSvlRTQcz-m4IKtOriVFM3nSH0kyOnWKC5vx=w544-h544-l90-rj'},
-//   {id: 1212, name: "Anna", subscribers: 1423, isSubscribed: true, image: 'https://lh3.googleusercontent.com/0HmJl4UyXLEK44n1EUA2NZxqf8dDVqnBs7FDBtShUy3v-yVz3ZePCfpIxuio-aXh13unRvnNvofqdQME=w544-h544-l90-rj'},
-// ]
+
 const Users = () => {
   const dispatch = useDispatch();
   useEffect(()=>{

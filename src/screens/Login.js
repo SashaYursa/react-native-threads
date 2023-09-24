@@ -1,18 +1,46 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { TextInput } from 'react-native-paper'
+import { useDispatch, useSelector } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loadUser, loginUser } from '../store/actions/UserActions'
 
 const Login = () => {
-  return (
+    const [login, setLogin] = useState('');
+    const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const error = useSelector(state => state.user.error);
+    const loading = useSelector(state => state.user.loading);
+    console.log(error)
+    useEffect(()=>{
+        const loginUser = async ()=> {
+            const userId = await AsyncStorage.getItem('userId');
+            if(userId !== null){
+            dispatch(loadUser(userId));
+            }
+        }
+        loginUser();
+    }, [])
+
+    const handleLogin = () => {
+        if(login.length > 0 && password.length > 0){
+            dispatch(loginUser({login, password}));
+        }
+    }
+
+  return loading 
+  ? (<View><Text>Loading</Text></View>)
+  :(
     <View>
         <LoginContainer>
             <Logo source={require('../../assets/logo.png')}/>
+            {error && <Text style={{color: 'red', fontSize: 16}}>Логін або пароль не дійсний</Text>}
             <LoginForm>
-                <LoginInput placeholder='Логін'/>
-                <LoginInput placeholder='Пароль'/>
+                <LoginInput value={login} onChangeText={e => setLogin(e)} placeholder='Логін'/>
+                <LoginInput value={password} onChangeText={e => setPassword(e)} placeholder='Пароль'/>
             </LoginForm>
-            <LoginButton>
+            <LoginButton onPress={handleLogin}>
                 <Text style={{color: '#fff'}}>
                     Увійти
                 </Text>
@@ -24,7 +52,7 @@ const Login = () => {
 }
 
 const LoginContainer = styled.View`
-padding-top: 30px;
+padding-top: 40px;
 height: 100%;
 display: flex;
 flex-direction: column;
@@ -33,7 +61,7 @@ align-items: center;
 background-color: #ebf8fa;
 `
 const Logo = styled.Image`
-margin-bottom: 30%;
+margin-bottom: auto;
 height: 100px;
 width: 100px;
 object-fit: contain;

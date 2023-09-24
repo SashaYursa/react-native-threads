@@ -4,37 +4,29 @@ import { GRAY_TEXT, USER_IMAGE_URL } from '../constants'
 import styled from 'styled-components'
 import Thread from '../components/Thread/Thread'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUser } from '../store/actions/UserActions'
+import { loadUser, removeUser } from '../store/actions/UserActions'
 import { ActivityIndicator } from 'react-native-paper'
-const userData = {
-  id: 1234,
-  name: 'Alex',
-  description: 'In this example, we import the primaryColor constant from the constants.js file and use it as the background color for the StyledButton component. The ${primaryColor} syntax allows you to interpolate the constant value into the styled components',
-  image: 'https://th.bing.com/th/id/OIG.y3eGwbcLkQtDhkCEsLKu',
-  subs: 100,
-  followers: 97,
-  threads: [
-      {id: 2423, subscribed: true, author: {name: "Alex", image: 'https://th.bing.com/th/id/OIG.y3eGwbcLkQtDhkCEsLKu'}, time: "12 ч.", text: "Охоронець в тц підходить і називає мене ізюмінкою 🙂 чоловіки, от з кого треба брати приклад", likes: 293},
-      {id: 3434, subscribed: true, author: {name: "Alex", image: 'https://th.bing.com/th/id/OIG.y3eGwbcLkQtDhkCEsLKu'}, time: "18 ч.", text: "Охоронець в тц підходить і називає мене ізюмінкою 🙂 чоловіки, от з кого треба брати приклад", likes: 223},
-      {id: 7676, subscribed: true, author: {name: "Alex", image: 'https://th.bing.com/th/id/OIG.y3eGwbcLkQtDhkCEsLKu'}, time: "4 ч.", text: "Охоронець в тц підходить і називає мене ізюмінкою 🙂 чоловіки, от з кого треба брати приклад", likes: 19}
-  ]
-}
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Profile = () => {
   const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(loadUser(3))
-  }, [dispatch]);
+  const logOut = async () => {
+    await AsyncStorage.removeItem('userId');
+    console.log(await AsyncStorage.getItem('userId'))
+    console.log('logout')
+    dispatch(removeUser())
 
+  }
   const user = useSelector(state=> state.user.user)
+  console.log(user);
   let threads = user.threads;
-  if(user.threads > 1){
+  if(user.threads.length > 1){
     threads = user.threads.map(thread => ({
       ...thread,
       author_name: user.name,
       author_image: user.image,
       isSubscribed: true,
     }));
-  }else if(user.threads === 1){
+  }else if(user.threads.length === 1){
     threads = [{
       ...threads[0],
       author_name: user.name,
@@ -66,9 +58,12 @@ const Profile = () => {
         <ActionButton>
           <ActionText>Поширити профіль</ActionText>
         </ActionButton>
+        <ActionButton onPress={logOut}>
+          <ActionText>Вийти</ActionText>
+        </ActionButton>
       </ActionsContainer>
-      <View style={{flex: 1, backgroundColor: 'red', flexDirection: 'column'}}>
-        {threads.lenght > 0 
+      <View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
+        {threads.length > 0 
         ? threads.map(thread=> <Thread key={thread.id} thread={thread}/>)
         : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
       }

@@ -3,16 +3,22 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Profile from '../screens/Profile'
 import Threads from '../screens/Threads'
 import { Image, TextInput } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import Users from '../screens/Users'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styled from 'styled-components'
 import Login from '../screens/Login'
+import { useEffect } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+import Register from '../screens/Register'
 
 const Navigation = createBottomTabNavigator()
 
 export default () => {
-    return(
+    const userIsAuth = useSelector(state=> state.user.isLogined);
+    return userIsAuth 
+    ? (
         <NavigationContainer>
             <Navigation.Navigator>
                     <Navigation.Screen name='Threads' options={{
@@ -27,11 +33,22 @@ export default () => {
                     headerShown: false,
                     tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
                     }} component={Users}/>
-
-                <Navigation.Screen name='Логін' options={{
-                    headerShown: false,
-                    tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
-                    }} component={Login}/>
+            </Navigation.Navigator>
+        </NavigationContainer>
+    )
+    : (
+        <NavigationContainer>
+            <Navigation.Navigator>
+                <Navigation.Screen name='Login' options={{
+                        headerTitle: 'Вхід',
+                        headerTitleAlign: 'center',
+                        tabBarIcon: ({focused})=>(focused ?<Icon name='log-in' size={28}/> : <Icon name='log-in-outline' color='purple' size={28}/>)
+                }} component={Login}/>
+                <Navigation.Screen name='SignUp' options={{
+                        headerTitle: 'Реєстрація',
+                        headerTitleAlign: 'center',
+                        tabBarIcon: ({focused})=>(focused ?<Icon name='person-add' size={24}/> : <Icon name='person-add-outline' color='purple' size={24}/>)
+                }} component={Register}/>
             </Navigation.Navigator>
         </NavigationContainer>
     )

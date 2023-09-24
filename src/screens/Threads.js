@@ -16,9 +16,6 @@ const Threads = () => {
     dispatch(loadThreads())
   }, [dispatch]);
 
-  const remove = ()=> {
-    dispatch(removeThreads());
-  }
   const threads = useSelector(state=> state.threads.threads)
   const loading = useSelector(state=> state.threads.loading)
   
