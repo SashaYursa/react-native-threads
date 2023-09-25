@@ -1,53 +1,50 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { TextInput } from 'react-native-paper'
+import { ActivityIndicator, TextInput } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loadUser, loginUser } from '../store/actions/UserActions'
+import { loadUser, loginUser, removeUser, setError } from '../store/actions/UserActions'
+import LoginForm from '../components/Forms/LoginForm'
+import { useIsFocused } from '@react-navigation/native'
 
 const Login = () => {
-    const [login, setLogin] = useState('');
-    const [password, setPassword] = useState('');
+    const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const error = useSelector(state => state.user.error);
-    const loading = useSelector(state => state.user.loading);
-    console.log(error)
+    const loading = useSelector(state => state.user.loading); 
     useEffect(()=>{
         const loginUser = async ()=> {
             const userId = await AsyncStorage.getItem('userId');
             if(userId !== null){
             dispatch(loadUser(userId));
             }
+            else{
+                dispatch(removeUser());
+            }
         }
         loginUser();
-    }, [])
+    }, [isFocused])
 
-    const handleLogin = () => {
+    const handleLogin = (login, password) => {
         if(login.length > 0 && password.length > 0){
             dispatch(loginUser({login, password}));
+        }
+        else{
+            dispatch(setError("Заповніть всі поля"))
         }
     }
 
   return loading 
-  ? (<View><Text>Loading</Text></View>)
+  ? (<ActivityIndicator/>)
   :(
-    <View>
+    <KeyboardAvoidingView>
         <LoginContainer>
             <Logo source={require('../../assets/logo.png')}/>
-            {error && <Text style={{color: 'red', fontSize: 16}}>Логін або пароль не дійсний</Text>}
-            <LoginForm>
-                <LoginInput value={login} onChangeText={e => setLogin(e)} placeholder='Логін'/>
-                <LoginInput value={password} onChangeText={e => setPassword(e)} placeholder='Пароль'/>
-            </LoginForm>
-            <LoginButton onPress={handleLogin}>
-                <Text style={{color: '#fff'}}>
-                    Увійти
-                </Text>
-            </LoginButton>
+            {error && <Text style={{color: 'red', fontSize: 16}}>{error}</Text>}
+            <LoginForm handleLogin={handleLogin}/>
         </LoginContainer>
-      
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -61,42 +58,12 @@ align-items: center;
 background-color: #ebf8fa;
 `
 const Logo = styled.Image`
-margin-bottom: auto;
+margin-bottom: 270px;
 height: 100px;
 width: 100px;
 object-fit: contain;
 border-radius: 60px;
 overflow: hidden;
 `
-
-const LoginInput = styled.TextInput`
-width: 100%;
-background-color: #fff;
-padding: 15px 15px;
-font-size: 16px;
-border: 1px solid #c9c9c9;
-border-radius: 12px;
-
-`
-const LoginForm = styled.View`
-margin-bottom: 10px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-width: 100%;
-padding: 0 10px;
-`
-
-const LoginButton = styled.TouchableOpacity`
- background-color: #2a5cf5;
- width: 95%;
- border-radius: 20px;
- padding: 15px 10px;
- text-align: center;
- align-items: center;
- margin-bottom: 10%;
-`
-
-
 
 export default Login

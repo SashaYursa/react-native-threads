@@ -4,36 +4,18 @@ import { GRAY_TEXT, USER_IMAGE_URL } from '../constants'
 import styled from 'styled-components'
 import Thread from '../components/Thread/Thread'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUser, removeUser } from '../store/actions/UserActions'
+import { removeUser } from '../store/actions/UserActions'
 import { ActivityIndicator } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const Profile = () => {
+
+const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
   const logOut = async () => {
     await AsyncStorage.removeItem('userId');
-    console.log(await AsyncStorage.getItem('userId'))
-    console.log('logout')
     dispatch(removeUser())
-
   }
   const user = useSelector(state=> state.user.user)
-  console.log(user);
   let threads = user.threads;
-  if(user.threads.length > 1){
-    threads = user.threads.map(thread => ({
-      ...thread,
-      author_name: user.name,
-      author_image: user.image,
-      isSubscribed: true,
-    }));
-  }else if(user.threads.length === 1){
-    threads = [{
-      ...threads[0],
-      author_name: user.name,
-      author_image: user.image,
-      isSubscribed: true,
-    }]
-  }
   const loading = useSelector(state => state.user.loading)
   
   return loading 
@@ -52,7 +34,7 @@ const Profile = () => {
       </ImageContainer>
       </UserInfoContainer>
       <ActionsContainer>
-        <ActionButton>
+        <ActionButton onPress={()=> navigation.navigate('EditProfile')}>
           <ActionText>Редагувати профіль</ActionText>
         </ActionButton>
         <ActionButton>
@@ -63,7 +45,7 @@ const Profile = () => {
         </ActionButton>
       </ActionsContainer>
       <View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
-        {threads.length > 0 
+        {threads
         ? threads.map(thread=> <Thread key={thread.id} thread={thread}/>)
         : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
       }
@@ -139,11 +121,14 @@ flex: 1;
 align-items: center;
 background-color: #fff;
 padding: 6px 8px;
+align-items: center;
+justify-content: center;
 `
 
 const ActionText = styled.Text`
 font-size: 14px;
 font-weight: 700;
+text-align: center;
 `
 
 

@@ -12,9 +12,12 @@ import { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import Register from '../screens/Register'
+import EditProfile from '../screens/EditProfile'
+import { createStackNavigator } from '@react-navigation/stack'
+import ProfileNavigation from './ProfileNavigation'
 
 const Navigation = createBottomTabNavigator()
-
+const Stack = createStackNavigator()
 export default () => {
     const userIsAuth = useSelector(state=> state.user.isLogined);
     return userIsAuth 
@@ -28,7 +31,7 @@ export default () => {
                     }} component={Threads}/>
                     <Navigation.Screen name='Профіль' options={{
                         tabBarIcon: ({focused})=>(focused ?<Icon name='person-circle' size={28}/> : <Icon name='person-circle-outline' color='purple' size={28}/>)
-                    }} component={Profile}/>
+                    }} component={ProfileNavigation}/>
                 <Navigation.Screen name='Користувачі' options={{
                     headerShown: false,
                     tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)

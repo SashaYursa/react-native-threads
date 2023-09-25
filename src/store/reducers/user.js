@@ -1,16 +1,18 @@
-import { SET_USER, REMOVE_USER, LOGIN_USER, SET_LOADING, SET_ERROR } from '../types'
+import { SET_USER, REMOVE_USER, LOGIN_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY } from '../types'
 
 const initialState = {
   user: [],
   loading: false,
   isLogined: false,
-  error: false
+  error: false,
+  isEmptyLogin: true
 }
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type){
     case SET_USER:
     return{
+      ...state,
       user: action.payload,
       loading: false,
       isLogined: true,
@@ -18,6 +20,7 @@ export const userReducer = (state = initialState, action) => {
     }
     case REMOVE_USER: 
     return{
+      ...state,
       user: [],
       loading: false,
       isLogined: false,
@@ -25,6 +28,7 @@ export const userReducer = (state = initialState, action) => {
     }
     case LOGIN_USER: 
     return {
+      ...state,
       user: action.payload,
       loading: false,
       isLogined: true,
@@ -41,6 +45,11 @@ export const userReducer = (state = initialState, action) => {
       error : action.payload,
       loading: false
     }
+    case SET_IS_LOGIN_EMPTY:
+      return {
+        ...state, 
+        isEmptyLogin: action.payload
+      }
     default: return state;
   }
 }
