@@ -15,6 +15,7 @@ import Register from '../screens/Register'
 import EditProfile from '../screens/EditProfile'
 import { createStackNavigator } from '@react-navigation/stack'
 import ProfileNavigation from './ProfileNavigation'
+import UserEditWindow from '../screens/UserEditWindow'
 
 const Navigation = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -30,6 +31,8 @@ export default () => {
                         tabBarIcon: ({focused})=>(focused ?<Icon name='reorder-three' size={28}/> : <Icon name='reorder-three' color='purple' size={28}/>)
                     }} component={Threads}/>
                     <Navigation.Screen name='Профіль' options={{
+                        headerShown: false,
+                        tabBarStyle: {display: 'flex'},
                         tabBarIcon: ({focused})=>(focused ?<Icon name='person-circle' size={28}/> : <Icon name='person-circle-outline' color='purple' size={28}/>)
                     }} component={ProfileNavigation}/>
                 <Navigation.Screen name='Користувачі' options={{

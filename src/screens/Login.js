@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ActivityIndicator, TextInput } from 'react-native-paper'
@@ -38,7 +38,7 @@ const Login = () => {
   return loading 
   ? (<ActivityIndicator/>)
   :(
-    <KeyboardAvoidingView>
+    <KeyboardAvoidingView style={Platform.OS === 'ios' ? {paddingBottom: 27} : {}}>
         <LoginContainer>
             <Logo source={require('../../assets/logo.png')}/>
             {error && <Text style={{color: 'red', fontSize: 16}}>{error}</Text>}

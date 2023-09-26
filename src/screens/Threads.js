@@ -13,7 +13,6 @@ const Threads = () => {
 
   const threads = useSelector(state=> state.threads.threads)
   const loading = useSelector(state=> state.threads.loading)
-  console.log(threads)
   return loading 
   ? (
     <View style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>

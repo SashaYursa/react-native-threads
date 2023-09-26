@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY} from "../types";
+import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER} from "../types";
 import { DEFAULT_API_URL } from "../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -40,7 +40,6 @@ export const loginUser = (credentials) => {
 }
 
 export const registerUser = (credentials) => {
-    console.log(credentials)
     return async dispatch => {
         dispatch({type: SET_LOADING, payload: true});
         await axios.post(DEFAULT_API_URL + `users`, credentials)
@@ -66,6 +65,11 @@ export const checkUserName = (name) => {
             const result = data.data;
             dispatch({type: SET_IS_LOGIN_EMPTY, payload: result});
         })
+    }
+}
+export const editUserData = (field, data) => {
+    return async dispatch => {
+        dispatch({type: UPDATE_EDITED_USER, payload: {field, data}});
     }
 }
 

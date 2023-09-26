@@ -1,11 +1,13 @@
-import { SET_USER, REMOVE_USER, LOGIN_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY } from '../types'
+import { SET_USER, REMOVE_USER, LOGIN_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER } from '../types'
 
 const initialState = {
-  user: [],
+  user: {},
   loading: false,
   isLogined: false,
   error: false,
-  isEmptyLogin: true
+  isEmptyLogin: true,
+  userIsEdited: false,
+  editedUser: {}
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -16,7 +18,8 @@ export const userReducer = (state = initialState, action) => {
       user: action.payload,
       loading: false,
       isLogined: true,
-      error: false
+      error: false,
+      editedUser: action.payload
     }
     case REMOVE_USER: 
     return{
@@ -32,7 +35,8 @@ export const userReducer = (state = initialState, action) => {
       user: action.payload,
       loading: false,
       isLogined: true,
-      error: false
+      error: false,
+      editedUser: action.payload
     }
     case SET_LOADING: 
     return {
@@ -49,6 +53,15 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state, 
         isEmptyLogin: action.payload
+    }
+    case UPDATE_EDITED_USER: 
+      return {
+        ...state,
+        userIsEdited: true,
+        editedUser: {
+          ...state.editedUser,
+          [action.payload.field]:  action.payload.data
+        }
       }
     default: return state;
   }

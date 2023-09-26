@@ -34,7 +34,7 @@ const Profile = ({ navigation }) => {
       </ImageContainer>
       </UserInfoContainer>
       <ActionsContainer>
-        <ActionButton onPress={()=> navigation.navigate('EditProfile')}>
+        <ActionButton onPress={()=> navigation.navigate('UserEditWindow')}>
           <ActionText>Редагувати профіль</ActionText>
         </ActionButton>
         <ActionButton>
