@@ -6,11 +6,13 @@ import EditDescription from '../screens/UserEditWindow';
 import UserEditWindow from '../screens/UserEditWindow';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useState } from 'react';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const Stack = createStackNavigator();
 const ProfileNavigation = () => {
   const [isEdited, setIsEdited] = useState(false)
   return (
+    <ActionSheetProvider>
    <Stack.Navigator>
     <Stack.Screen name='Profile' options={{
         headerTitle: 'Профіль',
@@ -37,6 +39,7 @@ const ProfileNavigation = () => {
         },
     }}} component={UserEditWindow} />
    </Stack.Navigator>
+   </ActionSheetProvider>
   )
 }
 
