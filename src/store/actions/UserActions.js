@@ -1,12 +1,15 @@
 import axios from "axios";
-import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER} from "../types";
-import { DEFAULT_API_URL } from "../../constants";
+import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER, SET_EDIT_USER} from "../types";
+import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import * as FileSystem from 'expo-file-system';
 export const loadUser = (id) => {
     return async dispatch => {
         await axios.get(DEFAULT_API_URL + `users/${id}`)
-        .then(user => dispatch({type: SET_USER, payload: user.data}))
+        .then(user => {
+            user.data.image = USER_IMAGE_URL + user.data.image;
+            dispatch({type: SET_USER, payload: user.data})
+        })
     }
 }
 export const removeUser = () => {
@@ -70,6 +73,37 @@ export const checkUserName = (name) => {
 export const editUserData = (field, data) => {
     return async dispatch => {
         dispatch({type: UPDATE_EDITED_USER, payload: {field, data}});
+    }
+}
+
+export const compareUsers = (user, editUser) => {
+    return async dispatch => {
+    user = JSON.stringify(user);
+    editUser = JSON.stringify(editUser);
+    const isEdit = user !== editUser;
+    dispatch({type: SET_EDIT_USER, payload: isEdit});    
+}
+}
+export const updateUser = (user) => {
+    return async dispatch => {
+        return axios.put(DEFAULT_API_URL + `users/${user.id}`, {...user})
+        .then(data => {
+            console.log(data.data)
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
+}
+export const updateUserImage = (id, uri) => {
+    return async dispatch => {
+       // await FileSystem.readAsStringAsync(uri).then(data=> console.log(data))
+        await FileSystem.uploadAsync(DEFAULT_API_URL + `users/${id}`, uri, {
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: 'file'
+    })
+    .then(data => console.log(data));
     }
 }
 

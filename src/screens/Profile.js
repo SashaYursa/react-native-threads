@@ -30,7 +30,7 @@ const Profile = ({ navigation }) => {
         <Subscribers>{user.subs} 10 подписчиков</Subscribers>
       </UserInfo> 
       <ImageContainer>
-        <UserImage source={{uri: (USER_IMAGE_URL + user.image)}} />
+        <UserImage source={{uri: user.image}} />
       </ImageContainer>
       </UserInfoContainer>
       <ActionsContainer>

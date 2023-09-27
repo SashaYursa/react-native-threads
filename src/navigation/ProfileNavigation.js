@@ -5,12 +5,19 @@ import EditProfile from '../screens/EditProfile';
 import EditDescription from '../screens/UserEditWindow';
 import UserEditWindow from '../screens/UserEditWindow';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser, uploadImage } from '../store/actions/UserActions';
+import SaveUser from '../screens/SaveUser';
 
 const Stack = createStackNavigator();
 const ProfileNavigation = () => {
-  const [isEdited, setIsEdited] = useState(false)
+  const isEdit = useSelector(state=> state.user.userIsEdited)
+  const editedUser = useSelector(state => state.user.editedUser)
+  const user = useSelector(state => state.user.user)
+  const dispatch = useDispatch();
+  console.log(isEdit)
   return (
     <ActionSheetProvider>
    <Stack.Navigator>
@@ -32,12 +39,16 @@ const ProfileNavigation = () => {
         },
         headerRight: () => {
             return (
-              <Text style={{marginRight: 10, fontWeight: 700, fontSize: 18,/* color: isEdited ? '#000' : 'gray'*/}} onPress={()=>{
-               /*if(isEdited)*/ closeModal(navigation)
+              <Text style={{marginRight: 10, fontWeight: 700, fontSize: 18, color: isEdit ? '#000' : 'gray'}} onPress={()=>{
+                if(isEdit){
+                navigation.navigate('UploadWindow');
+               } 
               }}>Готово</Text>
             )
         },
     }}} component={UserEditWindow} />
+    <Stack.Screen name='UploadWindow' options={{
+    }} component={SaveUser}/>
    </Stack.Navigator>
    </ActionSheetProvider>
   )

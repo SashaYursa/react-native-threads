@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { editUserData } from '../store/actions/UserActions'
+import { compareUsers, editUserData } from '../store/actions/UserActions'
 import { useDispatch } from 'react-redux'
 const EditProfile = ({route, navigation}) => {
   const [editedData, setEditedData] = useState(route.params.data);
@@ -19,6 +19,7 @@ const EditProfile = ({route, navigation}) => {
       return (
         <Text style={{marginRight: 10, fontWeight: 700, fontSize: 18, color:  '#000'}} onPress={()=>{
         dispatch(editUserData(route.params.editedData, editedData));
+        
         navigation.navigate('UserEditWindow')
         }}>Готово</Text>
       )

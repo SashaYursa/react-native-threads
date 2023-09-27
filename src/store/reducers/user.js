@@ -1,4 +1,4 @@
-import { SET_USER, REMOVE_USER, LOGIN_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER } from '../types'
+import { SET_USER, REMOVE_USER, LOGIN_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER, SET_EDIT_USER } from '../types'
 
 const initialState = {
   user: {},
@@ -63,6 +63,11 @@ export const userReducer = (state = initialState, action) => {
           [action.payload.field]:  action.payload.data
         }
       }
+    case SET_EDIT_USER: 
+    return {
+      ...state, 
+      userIsEdited: action.payload
+    }
     default: return state;
   }
 }

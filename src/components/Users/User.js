@@ -15,7 +15,7 @@ const User = ({user}) => {
 
   return (
     <UserItem>
-        <UserImage source={{uri: USER_IMAGE_URL + user.image}}/>
+        <UserImage source={{uri: user.image}}/>
         <UserInfoContainer style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3'}}>
             <UserInfo>
                 <UserName>{user.name}</UserName>
