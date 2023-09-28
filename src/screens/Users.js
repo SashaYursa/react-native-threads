@@ -3,19 +3,19 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { GRAY_TEXT } from '../constants';
-import User from '../components/Users/User';
 import { loadUsers } from '../store/actions/usersActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
+import SearchUser from '../components/SearchUser/SearchUser';
 
 const Users = () => {
+  const userId = useSelector(state => state.user.user.id);
   const dispatch = useDispatch();
   useEffect(()=>{
-    dispatch(loadUsers())
+    dispatch(loadUsers(userId))
   }, [dispatch]);
 
   const users = useSelector(state=> state.users.users)
-  console.log(users)
   const loading = useSelector(state=> state.users.loading)
   return loading 
   ? (<ActivityIndicator size={'large'}/>)
@@ -29,7 +29,7 @@ const Users = () => {
         <SearchInput placeholder='Пошук'/>
       </SearchContainer>
       <UsersContainer>
-        {users.map(user=>(<User key={user.id} user={user}/>))}
+        {users.map(user=>(<SearchUser key={user.id} user={user}/>))}
       </UsersContainer>
     </ScrollView>
     </Container>

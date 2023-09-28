@@ -30,7 +30,8 @@ export default () => {
                         headerTitleAlign: 'center',
                         tabBarIcon: ({focused})=>(focused ?<Icon name='reorder-three' size={28}/> : <Icon name='reorder-three' color='purple' size={28}/>)
                     }} component={Threads}/>
-                    <Navigation.Screen name='Профіль' options={{
+                    <Navigation.Screen name='ProfileNavigation' options={{
+                        headerTitle: 'Профіль',
                         headerShown: false,
                         tabBarStyle: {display: 'flex'},
                         tabBarIcon: ({focused})=>(focused ?<Icon name='person-circle' size={28}/> : <Icon name='person-circle-outline' color='purple' size={28}/>)

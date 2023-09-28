@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER, SET_EDIT_USER} from "../types";
+import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDATE_EDITED_USER, SET_EDIT_USER, SET_USER_IS_UPDATED} from "../types";
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from 'expo-file-system';
@@ -9,6 +9,9 @@ export const loadUser = (id) => {
         .then(user => {
             user.data.image = USER_IMAGE_URL + user.data.image;
             dispatch({type: SET_USER, payload: user.data})
+        })
+        .catch(error=> {
+            console.log('exeption in UserActions->loaduser', error)
         })
     }
 }
@@ -86,24 +89,37 @@ export const compareUsers = (user, editUser) => {
 }
 export const updateUser = (user) => {
     return async dispatch => {
-        return axios.put(DEFAULT_API_URL + `users/${user.id}`, {...user})
+        if(user){
+            return axios.put(DEFAULT_API_URL + `users/${user.id}`, {...user})
         .then(data => {
             console.log(data.data)
+            dispatch({type: SET_USER_IS_UPDATED, payload: {field: 'data', value: true}})
         })
         .catch(err => {
             console.log(err)
         });
+        }
+        else{
+            dispatch({type: SET_USER_IS_UPDATED, payload: {field: 'data', value: true}})
+        }
+        
     }
 }
 export const updateUserImage = (id, uri) => {
     return async dispatch => {
-       // await FileSystem.readAsStringAsync(uri).then(data=> console.log(data))
-        await FileSystem.uploadAsync(DEFAULT_API_URL + `users/${id}`, uri, {
-        httpMethod: 'POST',
-        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        fieldName: 'file'
-    })
-    .then(data => console.log(data));
+        if(id){
+            await FileSystem.uploadAsync(DEFAULT_API_URL + `users/${id}`, uri, {
+                httpMethod: 'POST',
+                uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+                fieldName: 'file'
+            })
+            .then(data => {
+                dispatch({type: SET_USER_IS_UPDATED, payload: {field: 'image', value: true}})
+            });
+        }
+        else{
+            dispatch({type: SET_USER_IS_UPDATED, payload: {field: 'image', value: true}})
+        }
     }
 }
 

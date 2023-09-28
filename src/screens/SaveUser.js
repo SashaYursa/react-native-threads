@@ -1,15 +1,20 @@
 import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeUser, updateUser, updateUserImage } from '../store/actions/UserActions';
+import { loadUser, removeUser, updateUser, updateUserImage } from '../store/actions/UserActions';
 
-const SaveUser = () => {
+const SaveUser = ({navigation}) => {
+    const loading = useSelector(state => state.user.loading);
     const user = useSelector(state => state.user.user);
     const updatedUser = useSelector(state => state.user.editedUser);
+    const uploadedItems = useSelector(state => state.user.uploadedItems);
     const dispatch = useDispatch();
     useEffect(() => {
     if(user.image !== updatedUser.image){
         dispatch(updateUserImage(user.id, updatedUser.image));        
+    }
+    else{
+      dispatch(updateUserImage(false, false));
     }
     if(user.name !== updatedUser.name 
       || user.description !== updatedUser.description 
@@ -20,8 +25,19 @@ const SaveUser = () => {
           is_private: updatedUser.is_private,
           password: updatedUser.password
         }));
-      }
+    }
+    else{
+      dispatch(updateUser(false));
+    }
+
     }, [])
+
+    useEffect(() => {
+        if (uploadedItems.data && uploadedItems.image){
+           dispatch(removeUser());
+          dispatch(loadUser(user.id))
+      }
+    }, [uploadedItems]);
 
   return (
     <View>

@@ -2,7 +2,12 @@ import { View, Text, Image, TouchableOpacity} from 'react-native'
 import React from 'react'
 import styled from 'styled-components'
 import { GRAY_TEXT, USER_IMAGE_URL } from '../../constants'
-const User = ({user}) => {
+import Icon from 'react-native-vector-icons/Ionicons'
+import { useDispatch, useSelector } from 'react-redux'
+import { handleSubscribe } from '../../store/actions/usersActions'
+const SearchUser = ({user}) => {
+    const subscribeInProgress = useSelector(state => state.users.subscribeInProgress);
+    const userId = useSelector(state => state.user.user.id);
     const isSubscribed = user.isSubscribed
      ? {
         text: "Ви підпсані",
@@ -12,16 +17,24 @@ const User = ({user}) => {
         text: "Підписатися",
         style: {fontWeight: 700, color: '#000'}
     }
-
+    const dispatch = useDispatch();
+  const handleSubscribeButton = () => {
+    dispatch(handleSubscribe(userId, user.id));
+  }
   return (
     <UserItem>
-        <UserImage source={{uri: user.image}}/>
+      <ImageContainer>
+      {user.image 
+      ? <UserImage source={{uri: user.image}}/>
+      : <Icon style={{margin: 'auto'}} size={25} name='person-outline'/>
+      }
+      </ImageContainer>
         <UserInfoContainer style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3'}}>
             <UserInfo>
                 <UserName>{user.name}</UserName>
-                <UserSubscribers>{user.subscribers}5 подпищиков</UserSubscribers>
+                <UserSubscribers>{user.subscribers} подпищиков</UserSubscribers>
             </UserInfo>
-            <SubscribeButton><Text style={isSubscribed.style}>{isSubscribed.text}</Text></SubscribeButton>
+            <SubscribeButton disabled={subscribeInProgress ? true : false} onPress={handleSubscribeButton}><Text style={isSubscribed.style}>{isSubscribed.text}</Text></SubscribeButton>
         </UserInfoContainer>
   </UserItem>
   )
@@ -37,6 +50,18 @@ const UserImage = styled.Image`
 width: 40px;
 height: 40px;
 border-radius: 20px;
+`
+const ImageContainer = styled.View`
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: #eaeaea;
+padding: 0;
+border-radius: 20px;
+height: 40px;
+width: 40px;
+
+align-self: center;
 `
 
 const UserInfoContainer = styled.View`
@@ -69,4 +94,4 @@ align-self: flex-start;
 border-radius: 6px;
 `
 
-export default User
+export default SearchUser
