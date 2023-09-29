@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { useState } from 'react'
 import {   GRAY_TEXT, THREAD_IMAGE_URL, USER_IMAGE_URL } from '../../constants'
 import ImageView from 'react-native-image-viewing';
-const Thread = ({thread}) => {
+const Thread = ({thread, moveToBranch}) => {
     const [imageOpened, setimageOpened] = useState(false);
     const currentDate = new Date();
     const images = thread.images.map(image=> ({uri: THREAD_IMAGE_URL + image.image_name}))
@@ -22,7 +22,7 @@ const Thread = ({thread}) => {
         onRequestClose={() => setimageOpened(false)}
       />)
     return (
-    <View style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
+    <TouchableOpacity onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
             <View style={{ paddingHorizontal: 5, flexDirection: 'row', gap: 10, alignItems: 'flex-start', justifyContent: 'space-between', width: '100%'}}>
                 <View style={{position: 'relative', height: 45}}>
                     <Image style={{width: 45, height: 45, borderRadius: 50, objectFit: 'cover'}} source={{uri: USER_IMAGE_URL + thread.author_image}}/>   
@@ -60,7 +60,7 @@ const Thread = ({thread}) => {
                 <Text style={{color: GRAY_TEXT, fontSize: 16}}>{thread.likes_count} отметок "Нравится"</Text>
             </View>
 
-        </View>
+        </TouchableOpacity>
   )
 }
 

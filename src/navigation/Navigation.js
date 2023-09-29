@@ -16,6 +16,8 @@ import EditProfile from '../screens/EditProfile'
 import { createStackNavigator } from '@react-navigation/stack'
 import ProfileNavigation from './ProfileNavigation'
 import UserEditWindow from '../screens/UserEditWindow'
+import Branch from '../screens/Branch'
+
 
 const Navigation = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -24,7 +26,9 @@ export default () => {
     return userIsAuth 
     ? (
         <NavigationContainer>
-            <Navigation.Navigator>
+            <Navigation.Navigator options={{
+                tabBarStyle: {display: 'flex'},
+            }}>
                     <Navigation.Screen name='Threads' options={{
                         headerTitle: () => (<HeaderImage source={require('../../assets/logo.png')}/>),
                         headerTitleAlign: 'center',
@@ -33,13 +37,17 @@ export default () => {
                     <Navigation.Screen name='ProfileNavigation' options={{
                         headerTitle: 'Профіль',
                         headerShown: false,
-                        tabBarStyle: {display: 'flex'},
+                        title: 'Профіль',
                         tabBarIcon: ({focused})=>(focused ?<Icon name='person-circle' size={28}/> : <Icon name='person-circle-outline' color='purple' size={28}/>)
                     }} component={ProfileNavigation}/>
-                <Navigation.Screen name='Користувачі' options={{
-                    headerShown: false,
-                    tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
+                    <Navigation.Screen name='Користувачі' options={{
+                        headerShown: false,
+                        tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
                     }} component={Users}/>
+                    <Navigation.Screen name='Branch' options={{
+                        headerTitle: 'Гілка',
+                        tabBarButton: ()=> null,
+                    }} component={Branch}/>
             </Navigation.Navigator>
         </NavigationContainer>
     )
