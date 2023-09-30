@@ -2,13 +2,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text } from 'react-native'
 import Profile from '../screens/Profile';
 import EditProfile from '../screens/EditProfile';
-import EditDescription from '../screens/UserEditWindow';
 import UserEditWindow from '../screens/UserEditWindow';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { useEffect, useState } from 'react';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser, uploadImage } from '../store/actions/UserActions';
 import SaveUser from '../screens/SaveUser';
 
 const Stack = createStackNavigator();

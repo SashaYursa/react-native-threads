@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import Thread from '../components/Thread/Thread';
 import { loadThreads } from '../store/actions/threadsActions';
@@ -27,7 +27,11 @@ const Threads = ({navigation}) => {
   ? (
     <ScrollView>
     <View style={{flex: 1, margin: 0, padding: 0, backgroundColor: "#fff"}}>
-        {threads.map(thread=> <Thread moveToBranch={moveToBranch} key={thread.id} thread={thread}/>)}
+        {threads.map(thread=> (
+        <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
+          <Thread moveToBranch={moveToBranch} thread={thread}/>
+        </TouchableOpacity>
+        ))}
     </View>
     </ScrollView>
   )

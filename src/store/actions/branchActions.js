@@ -1,13 +1,13 @@
 import axios from "axios";
-import { LOAD_BRANCH } from "../types";
+import { LOAD_BRANCH_COMMENTS, SET_THREAD } from "../types";
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 
-export const loadBranch = (threadId) => {
+export const loadBranch = (thread) => {
     return async dispatch => {
-        await axios.get(DEFAULT_API_URL + `threads/${threadId}`)
-        .then(branch =>{
-            console.log(branch.data);
-            dispatch({type: LOAD_BRANCH, payload: branch.data})
+        dispatch({type: SET_THREAD, payload: thread});
+        await axios.get(DEFAULT_API_URL + `comments/thread/${thread.id}`)
+        .then(comments =>{
+            dispatch({type: LOAD_BRANCH_COMMENTS, payload: comments.data})
         })
         .catch(exeption => {
             console.log('exeption in branchActions->loadBranch', exeption)

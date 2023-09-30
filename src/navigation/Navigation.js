@@ -44,10 +44,18 @@ export default () => {
                         headerShown: false,
                         tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' color='purple' size={28}/>)
                     }} component={Users}/>
-                    <Navigation.Screen name='Branch' options={{
+                    <Navigation.Screen name='Branch' options={({navigation})=> ({
                         headerTitle: 'Гілка',
+                        tabBarStyle: {display: 'none'},
+                        headerLeft: ()=> {
+                            return (
+                                <Icon style={{marginLeft: 10}} size={30} onPress={()=>{
+                                    navigation.goBack()
+                                }} name="arrow-back-outline"/>
+                              )
+                        },
                         tabBarButton: ()=> null,
-                    }} component={Branch}/>
+                    })} component={Branch}/>
             </Navigation.Navigator>
         </NavigationContainer>
     )
