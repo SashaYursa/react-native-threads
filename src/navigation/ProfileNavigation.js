@@ -14,7 +14,6 @@ const ProfileNavigation = () => {
   const editedUser = useSelector(state => state.user.editedUser)
   const user = useSelector(state => state.user.user)
   const dispatch = useDispatch();
-  console.log(isEdit)
   return (
     <ActionSheetProvider>
    <Stack.Navigator>

@@ -21,7 +21,6 @@ const UserEditWindow = ({navigation, route}) => {
     dispatch(editUserData("is_private", switchValue));
   }, [switchValue])
   useEffect(() => {
-    console.log()
     dispatch(compareUsers(user, originalUser));
   }, [dispatch])
   const navigate = (title, editedData, data) => {

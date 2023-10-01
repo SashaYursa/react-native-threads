@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOAD_BRANCH_COMMENTS, SET_THREAD } from "../types";
+import { ADD_COMMENT, LOAD_BRANCH_COMMENTS, SET_THREAD } from "../types";
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 
 export const loadBranch = (thread) => {
@@ -11,6 +11,16 @@ export const loadBranch = (thread) => {
         })
         .catch(exeption => {
             console.log('exeption in branchActions->loadBranch', exeption)
+        })
+    }
+}
+
+export const addThreadComment = (comment, authorId, threadId) => {
+    return async dispatch => {
+        await axios.post(DEFAULT_API_URL + `comments/threads/${threadId}`, {comment, authorId, threadId})
+        .then(data=> {
+            console.log(data.data);
+            dispatch({type: ADD_COMMENT, payload: data.data});
         })
     }
 }

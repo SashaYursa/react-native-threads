@@ -1,4 +1,4 @@
-import { LOAD_BRANCH_COMMENTS, SET_LOADING, SET_THREAD } from '../types'
+import { LOAD_BRANCH_COMMENTS, SET_LOADING, SET_THREAD, ADD_COMMENT } from '../types'
 
 const initialState = {
   thread: {},
@@ -24,6 +24,21 @@ export const branchReducer = (state = initialState, action) => {
     return {
       ...state,
       loading: action.payload
+    }
+    case ADD_COMMENT: 
+    return {
+      ...state,
+      thread: {
+        ...state.thread,
+        comments: {
+          ...state.thread.comments,
+          comments_count: state.thread.comments.comments_count + 1
+        }
+      },
+      comments: [
+        ...state.comments,
+        action.payload
+      ]
     }
     default: return state;
   }

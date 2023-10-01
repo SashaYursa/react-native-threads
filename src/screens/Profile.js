@@ -7,17 +7,25 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeUser } from '../store/actions/UserActions'
 import { ActivityIndicator } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loadUserThreads } from '../store/actions/userThreadsActions'
 
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
+  const user = useSelector(state=> state.user.user)
+  const loading = useSelector(state => state.user.loading)
+  const threads = useSelector(state=> state.userThreads.threads)
+  //console.log(threads, '->>> threads')
   const logOut = async () => {
     await AsyncStorage.removeItem('userId');
     dispatch(removeUser())
   }
-  const user = useSelector(state=> state.user.user)
-  let threads = user.threads;
-  const loading = useSelector(state => state.user.loading)
-  
+  useEffect(()=> {
+    dispatch(loadUserThreads(user.id))
+  },[user.id])
+
+  const moveToBranch = (thread) => {
+    navigation.navigate('Branch', {thread});
+  }
   return loading 
   ? ( <ActivityIndicator size={'large'}/> ) 
   : (
@@ -46,7 +54,10 @@ const Profile = ({ navigation }) => {
       </ActionsContainer>
       <View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
         {threads
-        ? threads.map(thread=> <Thread key={thread.id} thread={thread}/>)
+        ? threads.map(thread=>(
+          <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
+            <Thread displayReply={true} thread={thread}/>
+          </TouchableOpacity>))
         : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
       }
       </View>

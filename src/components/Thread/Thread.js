@@ -9,14 +9,13 @@ import { Dimensions } from "react-native";
 import { useRef } from 'react';
 
 const width = Dimensions.get('window').width;
-const Thread = ({thread}) => {
+const Thread = ({thread, displayReply}) => {
     const [imageOpened, setimageOpened] = useState(false);
     const currentDate = new Date();
     const images = thread.images.map(image=> ({uri: THREAD_IMAGE_URL + image.image_name}))
     const desiredDate = new Date(thread.created_at);
     const timeDifference = currentDate - desiredDate;
     const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
-    console.log(thread.comments.preview_images)
     const openImage = () => {
          setimageOpened(true);
     }
@@ -38,12 +37,12 @@ const Thread = ({thread}) => {
                     </TouchableOpacity>
                     }         
                 </View>
-                {thread.comments.comments_count > 0 &&
+                {(thread.comments.comments_count > 0 && displayReply) &&
                 <>
                 <ThreadElement/>
                 <PreviewImages>
                     {thread.comments.preview_images.map((image, i) => (
-                        <Image style={{position: 'absolute',marginHorizontal: 13, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
+                        <Image key={image.id} style={{position: 'absolute',marginHorizontal: 13, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
                     ))}
                 </PreviewImages>
                 </>
@@ -62,8 +61,8 @@ const Thread = ({thread}) => {
             <ScrollView showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         horizontal={true} 
-                        style={{overflow: 'visible', paddingLeft: 60, left: -65, width}}> 
-                <View style={{flexDirection: 'row', gap: 10, marginTop: 10, marginEnd: 70}}>
+                        style={{overflow: 'visible', paddingLeft: 70, left: -75, width}}> 
+                <View style={{flexDirection: 'row', gap: 10, marginTop: 10, marginEnd: 75}}>
                     {thread.images.map(image => <ThreadImage key={image.id} openImage={openImage} image={image}/>)}
                 </View>
             </ScrollView>
@@ -74,7 +73,7 @@ const Thread = ({thread}) => {
                 thread.comments.comments_count > 0 &&
                 <Text style={{color: GRAY_TEXT, fontSize: 16}}>Відповіді {thread.comments.comments_count} · </Text>
                 }
-                <Text style={{color: GRAY_TEXT, fontSize: 16}}>{thread.likes_count} отметок "Нравится"</Text>
+                <Text style={{color: GRAY_TEXT, fontSize: 16}}>{thread.likes_count} відмітки "Подобається"</Text>
             </View>
             </RightItemsContainer>
             </RowContainer>
@@ -93,6 +92,7 @@ flex-direction: row;
 const LeftItemsContainer = styled.View`
 display: flex;
 flex-direction: column;
+margin-left: 10px;
 `
 const ThreadElement = styled.View`
 flex: 1;
@@ -104,7 +104,7 @@ const PreviewImages = styled.View`
 position: relative;
 display: flex;
 flex-direction: row;
-margin-bottom: 25px;
+margin-bottom: 27px;
 justify-content: center;
 `
 
