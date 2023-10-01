@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addThreadComment, loadBranch } from '../store/actions/branchActions'
+import { addThreadComment, loadBranch, loadCommentReplies } from '../store/actions/branchActions'
 import Thread from '../components/Thread/Thread'
 import { GRAY_TEXT, USER_IMAGE_URL } from '../constants'
 import { ActivityIndicator, TextInput } from 'react-native-paper'
@@ -17,21 +17,29 @@ const Branch = ({route}) => {
   }, [route.params.thread])
   const thread = useSelector(state => state.branch.thread);
   const comments = useSelector(state => state.branch.comments);
+  //console.log(comments, '------comments')
   const user = useSelector(state => state.user.user);
   const addComment = (comment) => {
     dispatch(addThreadComment(comment, user.id, thread.id))
   }
 
-  return thread?.author_id ?(
+  const showReplies = (comment) => {
+    //console.log(comment)
+    dispatch(loadCommentReplies(comment.id))
+  }
+
+  return thread?.author_id 
+  ? (
   <View style={{backgroundColor: '#fff', flex: 1, flexDirection: 'column'}}>
   <ScrollView>
     
       <Thread thread={thread}/>
       <CommentsContainer>
       { comments
-        ? comments.map(comment => (
-          <ThreadComment key={comment.id} comment={comment}/>
-        ))
+        ? comments.map((comment, i) => {
+          return (
+          <CommentsBlock key={i} showReplies={showReplies} comments={comment}/>
+        )})
         : <ActivityIndicator style={{marginTop: 10}} size='large' />
       }
       </CommentsContainer>
@@ -62,8 +70,32 @@ const ThreadCommentInput = ({handleComment, threadAuthor}) => {
   )
 }
 
-const ThreadComment = ({comment}) => {
-  const replyInfo = comment.reply_info[0];
+const CommentsBlock = ({comments, showReplies}) => {
+  //console.log(comments[0])
+  return comments.length > 1
+  ?(
+    <View style={{marginTop: 10, borderBottomWidth: 1, borderColor: '#c9c9c9'}}>
+    {
+      comments.map((comment, index) => {
+        return (
+       <ThreadComment key={index} comment={comment} hideReplies={false} haveReply={(index + 1) === comments.length ? false : true }/>
+      )})
+    }
+    </View>
+  )
+  : (
+    <CommentButton style={{marginTop: 10}} activeOpacity={.5} onPress={()=>showReplies(comments[0])} >
+      {
+        <ThreadComment comment={comments[0]} hideReplies={true} haveReply={(comments[0].reply_info[0].count_reply > 0) ? true : false}/>
+      }
+    </CommentButton>
+  )
+}
+
+const ThreadComment = ({comment, hideReplies, haveReply}) => {
+  //console.log(comment, '----comm')
+  const replyInfo = comment?.reply_info[0];
+  console.log(replyInfo)
   const desiredDate = new Date(comment.created_at);
   const currentDate = new Date();
   const timeDifference = currentDate - desiredDate;
@@ -72,19 +104,18 @@ const ThreadComment = ({comment}) => {
     <CommentContainer>
     <ImageContainer>
       <UserImage source={{uri: USER_IMAGE_URL + comment.user_image}}/>
-      {replyInfo.count_reply > 0 &&
-      <>
+      {haveReply &&
       <ThreadElement/>
-      <PreviewImages>
-        {
-        replyInfo.preview_images.map((image, i) =>{ 
+      } 
+      { (hideReplies && replyInfo.preview_images !== 0) &&(
+        <PreviewImages>
+        {replyInfo.preview_images?.map((image, i) =>{ 
         return(
             <Image key={i} style={{position: 'absolute', marginStart: 8.5, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
-        )})
-        }
-      </PreviewImages>
-      </>
+        )})}
+        </PreviewImages>)
       }
+
     </ImageContainer>
     <CommentTextContainer>
       <UserInfoContainer>
@@ -98,7 +129,7 @@ const ThreadComment = ({comment}) => {
       <ActionButtons/>
       <View style={{marginTop: 15, flexDirection: 'row'}}>
         {
-        replyInfo.count_reply > 0 > 0 &&
+        haveReply &&
         <Text style={{color: GRAY_TEXT, fontSize: 16}}>Відповіді {replyInfo.count_reply} · </Text>
         }
         <Text style={{color: GRAY_TEXT, fontSize: 16}}>{comment.likes_count} відмітки "Подобається"</Text>
@@ -129,7 +160,9 @@ const CommentContainer = styled.View`
 display: flex;
 flex-direction: row;
 justify-content: space-between;
-padding: 10px;
+padding: 0 10px 10px 10px;
+`
+const CommentButton = styled.TouchableOpacity`
 border-bottom-width: 1px;
 border-color: #c9c9c9;
 `

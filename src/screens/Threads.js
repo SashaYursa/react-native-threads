@@ -6,7 +6,6 @@ import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Threads = ({navigation}) => { 
-  console.log(navigation)
   const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(loadThreads())
@@ -28,11 +27,12 @@ const Threads = ({navigation}) => {
   ? (
     <ScrollView>
     <View style={{flex: 1, margin: 0, padding: 0, backgroundColor: "#fff"}}>
-        {threads.map(thread=> (
-        <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
+        {threads.map((thread, i)=> {
+          return (
+        <TouchableOpacity key={i} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
           <Thread key={thread.id} moveToBranch={moveToBranch} displayReply={true} thread={thread}/>
         </TouchableOpacity>
-        ))}
+        )})}
     </View>
     </ScrollView>
   )

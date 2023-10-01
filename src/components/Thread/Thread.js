@@ -42,7 +42,7 @@ const Thread = ({thread, displayReply}) => {
                 <ThreadElement/>
                 <PreviewImages>
                     {thread.comments.preview_images.map((image, i) => (
-                        <Image key={image.id} style={{position: 'absolute',marginHorizontal: 13, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
+                        <Image key={i} style={{position: 'absolute',marginHorizontal: 13, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
                     ))}
                 </PreviewImages>
                 </>
@@ -63,7 +63,7 @@ const Thread = ({thread, displayReply}) => {
                         horizontal={true} 
                         style={{overflow: 'visible', paddingLeft: 70, left: -75, width}}> 
                 <View style={{flexDirection: 'row', gap: 10, marginTop: 10, marginEnd: 75}}>
-                    {thread.images.map(image => <ThreadImage key={image.id} openImage={openImage} image={image}/>)}
+                    {thread.images.map((image, i) => <ThreadImage key={i} openImage={openImage} image={image}/>)}
                 </View>
             </ScrollView>
             }
@@ -111,7 +111,7 @@ justify-content: center;
 const RightItemsContainer = styled.View`
 display: flex;
 flex-direction: column;
-padding: 10px;
+padding: 0 10px 10px ;
 flex: 1;
 overflow: visible;
 `
