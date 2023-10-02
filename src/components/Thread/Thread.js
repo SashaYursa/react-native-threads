@@ -7,18 +7,33 @@ import ActionButtons from '../ActionButtons/ActionButtons';
 import styled from 'styled-components';
 import { Dimensions } from "react-native";
 import { useRef } from 'react';
+import ActionButton from '../ActionButton/ActionButton';
 
 const width = Dimensions.get('window').width;
-const Thread = ({thread, displayReply}) => {
+const Thread = ({thread, displayReply, navigation}) => {
     const [imageOpened, setimageOpened] = useState(false);
     const currentDate = new Date();
     const images = thread.images.map(image=> ({uri: THREAD_IMAGE_URL + image.image_name}))
     const desiredDate = new Date(thread.created_at);
     const timeDifference = currentDate - desiredDate;
     const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
+    const handleLike = () => {
+        console.log('like')
+    }
+    const addComment = () => {
+        navigation.navigate('Branch', {thread, openComment: true});
+    }
+    const repostThread = () => {
+        console.log('repostThread')
+    }
+    const sendThread = () => {
+        console.log('sendThread')
+    }
+    
     const openImage = () => {
          setimageOpened(true);
     }
+
     if(imageOpened) return(<ImageView
         images={images}
         imageIndex={0}
@@ -67,7 +82,12 @@ const Thread = ({thread, displayReply}) => {
                 </View>
             </ScrollView>
             }
-            <ActionButtons/>
+            <ActionButtons>
+                <ActionButton size={28} name='heart-outline' handleClick={handleLike} />
+                <ActionButton name='chatbubble-outline' handleClick={addComment} />
+                <ActionButton name='git-compare-outline' handleClick={repostThread} />
+                <ActionButton name='paper-plane-outline' handleClick={sendThread} />
+            </ActionButtons>
             <View style={{marginTop: 15, flexDirection: 'row'}}>
                 {
                 thread.comments.comments_count > 0 &&

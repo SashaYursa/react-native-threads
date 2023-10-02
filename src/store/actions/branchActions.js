@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADD_COMMENT, LOAD_BRANCH_COMMENTS, SET_REPLIES, SET_THREAD, REMOVE_PREVIEW_IMAGES } from "../types";
+import { ADD_COMMENT, ADD_REPLY, LOAD_BRANCH_COMMENTS, SET_REPLIES, SET_THREAD, REMOVE_PREVIEW_IMAGES } from "../types";
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 
 export const loadBranch = (thread) => {
@@ -21,6 +21,20 @@ export const addThreadComment = (comment, authorId, threadId) => {
         .then(data=> {
             console.log('data',data.data);
             dispatch({type: ADD_COMMENT, payload: data.data});
+        })
+    }
+}
+
+export const addCommentReply = (comment, authorId, threadId, repliedCommentId) => {
+    
+    return async dispatch => {
+        console.log(comment, authorId, threadId, repliedCommentId)
+        await axios.post(DEFAULT_API_URL + `comments/reply/${repliedCommentId}`, {comment, authorId, reply: repliedCommentId, threadId})
+        .then(data=> {
+            dispatch({type: SET_REPLIES, payload: {commentId: repliedCommentId, replies: [data.data]}});
+        })
+        .catch(error=> {
+            console.log('--->>>>problem in branchActions->addCommentReply', error);
         })
     }
 }
