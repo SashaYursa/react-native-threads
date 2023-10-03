@@ -9,10 +9,8 @@ import FormItem, { EditLabel } from '../components/UserEdit/FormItem';
 import UserImage from '../components/UserEdit/UserImage';
 
 const UserEditWindow = ({navigation, route}) => {
-  const [imageIsLoading, setImageIsLoading] = useState(false);
   const userIsPrivate = useSelector(state => state.user.editedUser.is_private);
   const [switchValue, setSwitchValue] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
   const user = useSelector(state=> state.user.editedUser);
   const originalUser = useSelector(state=> state.user.user);
   const dispatch = useDispatch();

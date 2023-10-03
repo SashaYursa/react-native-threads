@@ -4,13 +4,15 @@ import { userReducer } from "./reducers/user";
 import { usersReducer } from "./reducers/users";
 import { branchReducer } from "./reducers/branch";
 import { userThreadsReducer } from "./reducers/userThreads";
+import { addThreadReducer } from "./reducers/addThread";
 
 const rootReducer = combineReducers({
     threads: threadsReducer,
     user: userReducer,
     userThreads: userThreadsReducer,
     users: usersReducer,
-    branch: branchReducer
+    branch: branchReducer,
+    addThread: addThreadReducer,
 })
 
 export default configureStore({reducer: rootReducer});
