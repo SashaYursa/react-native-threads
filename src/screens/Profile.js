@@ -14,6 +14,7 @@ const Profile = ({ navigation }) => {
   const user = useSelector(state=> state.user.user)
   const loading = useSelector(state => state.user.loading)
   const threads = useSelector(state=> state.userThreads.threads)
+  console.log(user, '---->user');
   //console.log(threads, '->>> threads')
   const logOut = async () => {
     await AsyncStorage.removeItem('userId');
@@ -35,7 +36,7 @@ const Profile = ({ navigation }) => {
       <UserInfo>
         <Name>{user.name}</Name>
         <Description>{user.description}</Description>
-        <Subscribers>{user.subs} 10 подписчиков</Subscribers>
+        <Subscribers>{user.subs} підписників</Subscribers>
       </UserInfo> 
       <ImageContainer>
         <UserImage source={{uri: user.image}} />

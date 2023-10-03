@@ -10,14 +10,16 @@ import { useState } from 'react';
 const Threads = ({navigation}) => { 
   
   const threads = useSelector(state=> state.threads.threads)
+  console.log(threads, '---->threads threads');
+  const user = useSelector(state => state.user.user);
   const loading = useSelector(state=> state.threads.loading)
   const onRefresh = useCallback(() => {
     dispatch(setLoading(true));
-    dispatch(loadThreads()); 
+    dispatch(loadThreads(user.id)); 
   }, []);
   const dispatch = useDispatch();
   useEffect(()=>{
-    dispatch(loadThreads())
+    dispatch(loadThreads(user.id))
   }, [dispatch, navigation]);
 
   const moveToBranch = (thread) => {

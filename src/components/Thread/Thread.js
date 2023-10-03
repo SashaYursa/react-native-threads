@@ -8,17 +8,26 @@ import styled from 'styled-components';
 import { Dimensions } from "react-native";
 import { useRef } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLike } from '../../store/actions/threadsActions';
+import { useEffect } from 'react';
 
 const width = Dimensions.get('window').width;
 const Thread = ({thread, displayReply, navigation}) => {
     const [imageOpened, setimageOpened] = useState(false);
     const currentDate = new Date();
+    const user = useSelector(state=> state.user.user);
+    const [isLiked, setIsLiked] = useState(false)
+    useEffect(()=> {
+        setIsLiked(Boolean(thread.likes.find(like => like.user_id === user.id)))
+    }, [thread.likes])
+    const dispatch = useDispatch();
     const images = thread.images.map(image=> ({uri: THREAD_IMAGE_URL + image.image_name}))
     const desiredDate = new Date(thread.created_at);
     const timeDifference = currentDate - desiredDate;
     const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
     const handleLike = () => {
-        console.log('like')
+        dispatch(setLike(user.id, thread.id));
     }
     const addComment = () => {
         navigation.navigate('Branch', {thread, openComment: true});
@@ -83,7 +92,7 @@ const Thread = ({thread, displayReply, navigation}) => {
             </ScrollView>
             }
             <ActionButtons>
-                <ActionButton size={28} name='heart-outline' handleClick={handleLike} />
+                <ActionButton size={28} name={isLiked ? 'heart' : 'heart-outline'} color={isLiked ? '#c92246' : '#000'} handleClick={handleLike} />
                 <ActionButton name='chatbubble-outline' handleClick={addComment} />
                 <ActionButton name='git-compare-outline' handleClick={repostThread} />
                 <ActionButton name='paper-plane-outline' handleClick={sendThread} />
