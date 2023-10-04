@@ -5,16 +5,15 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import ThreadAdditions from '../components/ThreadAdditions/ThreadAdditions'
 import { useDispatch, useSelector } from 'react-redux'
 import { GRAY_TEXT } from '../constants'
-import { deleteThreadError, setThreadError, setThreadText } from '../store/actions/addThreadActions'
+import { addThread, deleteThreadError, setThreadError, setThreadText } from '../store/actions/addThreadActions'
 const MAX_TEXT_LENGHT = 500;
 const AddThread = () => {
     const dispatch = useDispatch();
     const errors = useSelector(state => state.addThread.errors);
-    const text = useSelector(state => state.addThread.thread.text);
-    console.log(text);
+    const user = useSelector(state => state.user.user);
+    const newThread = useSelector(state => state.addThread.thread);
     const [emptyErrors, setEmptyErrors] = useState(true);
     useEffect(()=> {
-        console.log('changed')
         if(Object.keys(errors).length === 0){
             setEmptyErrors(true)
         }
@@ -31,8 +30,13 @@ const AddThread = () => {
         }
         dispatch(setThreadText(text));
     }
+    const handleAddThread = () => {
+        if(emptyErrors){
+            dispatch(addThread({authorId: user.id, data: newThread.text, images: newThread.images}))
+        }
+    }
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, overflow: 'hidden'}}>
         <AddThreadContainer>
             <ImageContainer>
                 <Image style={{width: 40, height: 40, borderRadius: 20, objectFit: 'contain'}} source={{uri: 'https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_1280.jpg'}}/>
@@ -42,15 +46,18 @@ const AddThread = () => {
                 <UserName>Alex</UserName>     
                 </UserNameContainer>
                 <FormContainer>
-                    <ThreadInput style={errors?.textError ? {color: 'red'} : {color: '#000'}} value={text} onChangeText={changeText} placeholder="Напишіть щось..."/>
+                    <ThreadInput multiline={true} style={errors?.textError ? {color: 'red'} : {color: '#000'}} value={newThread.text} onChangeText={changeText} placeholder="Напишіть щось..."/>
+                    {errors?.textError &&
                     <ErrorText>{errors?.textError}</ErrorText>
+                    }
                     <ThreadAdditions />
                 </FormContainer>
             </DataContainer>
         </AddThreadContainer>
         <AddThreadActions>
             <ErrorText>{errors?.imageError}</ErrorText>
-            <ActionButton disabled={!emptyErrors}>
+            <ErrorText>{errors?.loadError}</ErrorText>
+            <ActionButton onPress={handleAddThread} disabled={!emptyErrors}>
                 <ActionButtonText style={ emptyErrors ? {color: '#0f55f7'} : {color: GRAY_TEXT} }>Опублікувати</ActionButtonText>
             </ActionButton>
         </AddThreadActions>
@@ -85,7 +92,7 @@ justify-self: flex-end;
 `
 const ActionButtonText = styled.Text`
 font-size: 18px; 
-font-weight: 700,
+font-weight: 700;
 `
 const ImageContainer = styled.View`
 `
@@ -99,13 +106,14 @@ const UserNameContainer = styled.View`
 const FormContainer = styled.View`
 display: flex;
 flex-direction: column;
-flex-grow: 1;
 `
 const ThreadInput = styled.TextInput`
 background-color: #fff;
 border: none;
 color: #000;
 font-size: 16px;
+flex-grow: 1;
+max-width: 320px;
 `
 const UserName = styled.Text`
 font-size: 16px;
