@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADD_COMMENT, ADD_REPLY, LOAD_BRANCH_COMMENTS, SET_REPLIES, SET_THREAD, REMOVE_PREVIEW_IMAGES } from "../types";
+import { ADD_COMMENT, ADD_REPLY, REMOVE_COMMENT_LIKE, LOAD_BRANCH_COMMENTS, SET_REPLIES, SET_THREAD, REMOVE_PREVIEW_IMAGES, SET_COMMENT_LIKE } from "../types";
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 
 export const loadBranch = (thread) => {
@@ -44,8 +44,8 @@ export const loadCommentReplies = (commentId) => {
         await axios.get(DEFAULT_API_URL + `comments/replies/${commentId}`)
         .then(data => {
             //console.log(data.data, 'loadCommentReplies-> data');
-            dispatch({type: SET_REPLIES, payload: {replies: data.data, commentId}});
-           // dispatch({type: REMOVE_PREVIEW_IMAGES, payload: commentId});
+        dispatch({type: SET_REPLIES, payload: {replies: data.data, commentId}});
+           //dispatch({type: REMOVE_PREVIEW_IMAGES, payload: commentId});
         })
         .catch(error => {
             console.log(error);
@@ -53,20 +53,21 @@ export const loadCommentReplies = (commentId) => {
     }
 }
 
-export const handleSubscribe = (userId, subscribeTo) => {
-
+export const setCommentLike = (userId, commentId) => {
     return async dispatch => {
-        dispatch({type: HANDLE_SUBSCRIBE_PROGRESS, payload: true});
-        await axios.post(DEFAULT_API_URL + `users?userId=${userId}`, {subscribeTo})
-        .then(data => {
-            console.log(data.data);
-            if(data){
-            dispatch({type: HANDLE_SUBSCRIBE, payload: subscribeTo});
+        await axios.put(DEFAULT_API_URL + 'comments/likes', {userId, commentId})
+        .then(data=> {
+            const result = data.data
+            console.log(result,'res');
+            if(result.status === 'removed'){
+                dispatch({type: REMOVE_COMMENT_LIKE, payload: {commentId, likeId: result.data}})
             }
-            dispatch({type: HANDLE_SUBSCRIBE_PROGRESS, payload: false});
+            else{
+                dispatch({type: SET_COMMENT_LIKE, payload: {commentId, likeId: result.data, userId}})
+            }
         })
-        .catch(exeption => {
-            console.log('exeption in userActions->handleSubscribe', exeption)
+        .catch(error => {
+            console.log('exeption in branchActions->setCommentLike' , error)
         })
     }
 }

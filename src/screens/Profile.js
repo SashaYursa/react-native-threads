@@ -14,8 +14,8 @@ const Profile = ({ navigation }) => {
   const user = useSelector(state=> state.user.user)
   const loading = useSelector(state => state.user.loading)
   const threads = useSelector(state=> state.userThreads.threads)
-  console.log(user, '---->user');
-  //console.log(threads, '->>> threads')
+  const threadsLoading = useSelector(state=> state.userThreads.loading)
+  console.log(threadsLoading, '---->threadsLoading');
   const logOut = async () => {
     await AsyncStorage.removeItem('userId');
     dispatch(removeUser())
@@ -53,7 +53,8 @@ const Profile = ({ navigation }) => {
           <ActionText>Вийти</ActionText>
         </ActionButton>
       </ActionsContainer>
-      <View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
+      { !threadsLoading 
+      ? (<View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
         {threads
         ? threads.map(thread=>(
           <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
@@ -61,7 +62,11 @@ const Profile = ({ navigation }) => {
           </TouchableOpacity>))
         : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
       }
-      </View>
+      </View>)
+      : (<View style={{flex: 1, backgroundColor: '#fff', marginTop: 30}}>
+        <ActivityIndicator size={'small'}/>
+      </View>)
+      }
     </Container>
     </ScrollView>
   )

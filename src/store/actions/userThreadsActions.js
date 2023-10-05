@@ -6,7 +6,6 @@ export const loadUserThreads = (userId) => {
     return async dispatch => {
         await axios.get(DEFAULT_API_URL + `threads/user/${userId}`)
         .then(threads=> {
-            console.log(threads.data, '------> data');
             dispatch({type: LOAD_USER_THREADS, payload: threads.data})
         })
     }

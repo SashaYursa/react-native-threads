@@ -15,4 +15,10 @@ const rootReducer = combineReducers({
     addThread: addThreadReducer,
 })
 
-export default configureStore({reducer: rootReducer});
+export default configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        immutableCheck: { warnAfter: 128 },
+        serializableCheck: { warnAfter: 128 },
+    })
+});

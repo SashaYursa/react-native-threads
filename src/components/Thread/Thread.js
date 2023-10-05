@@ -87,7 +87,7 @@ const Thread = ({thread, displayReply, navigation}) => {
                         horizontal={true} 
                         style={{overflow: 'visible', paddingLeft: 70, left: -75, width}}> 
                 <View style={{flexDirection: 'row', gap: 10, marginTop: 10, marginEnd: 75}}>
-                    {thread.images.map((image, i) => <ThreadImage key={i} openImage={openImage} image={image}/>)}
+                    {thread.images.map((image, i) => <ThreadImage key={image.image_name + i} openImage={openImage} image={image}/>)}
                 </View>
             </ScrollView>
             }
@@ -154,8 +154,10 @@ gap: 10px;
 const ThreadImage = ({image, openImage}) => {
     return (
         <TouchableOpacity onPress={openImage} activeOpacity={1}>
-            <Image style={{borderRadius: 8, width: 300, height: 300}} source={{uri: THREAD_IMAGE_URL + image.image_name}}/>
-        </TouchableOpacity>
+            <Image
+             style={{backgroundColor: '#dedede', borderRadius: 8, width: 300, height: 300}} source={{uri: THREAD_IMAGE_URL + image.image_name}}
+             />
+             </TouchableOpacity>
     )
 }
 

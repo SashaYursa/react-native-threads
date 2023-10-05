@@ -56,7 +56,7 @@ const Branch = ({route, navigation}) => {
       { comments
         ? comments.map((comment, i) => {
           return (
-          <CommentsBlock key={i} addReply={addReplyToComment} showReplies={showReplies} comments={comment}/>
+          <CommentsBlock key={i} addReply={addReplyToComment} user={user} showReplies={showReplies} comments={comment}/>
         )})
         : <ActivityIndicator style={{marginTop: 10}} size='large' />
       }
@@ -71,7 +71,7 @@ const Branch = ({route, navigation}) => {
 }
 
 
-const CommentsBlock = ({comments, showReplies, addReply}) => {
+const CommentsBlock = ({comments, showReplies, addReply, user}) => {
   //console.log(comments[0])
   return comments.length > 1
   ?(
@@ -79,7 +79,7 @@ const CommentsBlock = ({comments, showReplies, addReply}) => {
     {
       comments.map((comment, index) => {
         return (
-       <ThreadComment key={index} comment={comment} addReply={addReply} hideReplies={false} haveReply={(index + 1) === comments.length ? false : true }/>
+       <ThreadComment key={index} comment={comment} user={user} addReply={addReply} hideReplies={false} haveReply={(index + 1) === comments.length ? false : true }/>
       )})
     }
     </View>
@@ -87,7 +87,7 @@ const CommentsBlock = ({comments, showReplies, addReply}) => {
   : (
     <CommentButton style={{marginTop: 10}} activeOpacity={.5} onPress={()=>showReplies(comments[0])} >
       {
-        <ThreadComment comment={comments[0]} addReply={addReply} hideReplies={true} haveReply={(comments[0].reply_info[0].count_reply > 0) ? true : false}/>
+        <ThreadComment comment={comments[0]} addReply={addReply} user={user} hideReplies={true} haveReply={(comments[0].reply_info[0].count_reply > 0) ? true : false}/>
       }
     </CommentButton>
   )

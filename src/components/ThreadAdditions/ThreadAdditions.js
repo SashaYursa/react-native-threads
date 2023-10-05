@@ -17,7 +17,7 @@ const ThreadAdditions = () => {
   const errors = useSelector(state => state.addThread.errors);
     const chooseImage = async () => {
         const res = await ImagePicker.launchImageLibraryAsync({
-          quality: 1,
+          quality: 0.4,
           aspect: [4, 3],
           selectionLimit: MAX_SELECTED,
           allowsMultipleSelection: true,

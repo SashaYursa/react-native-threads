@@ -1,4 +1,4 @@
-import { SET_ADD_THREAD_IMAGE, SET_ADD_THREAD_TEXT, SET_ADD_THREAD_ERROR, DELETE_ADD_THREAD_IMAGE, DELETE_ADD_THREAD_ERROR } from '../types'
+import { SET_ADD_THREAD_LOADING, SET_ADD_THREAD_IMAGE, SET_ADD_THREAD_TEXT, SET_ADD_THREAD_ERROR, DELETE_ADD_THREAD_IMAGE, DELETE_ADD_THREAD_ERROR, CLEAR_ADD_THREAD_DATA } from '../types'
 
 const initialState = {
   thread: {
@@ -11,6 +11,11 @@ const initialState = {
 
 export const addThreadReducer = (state = initialState, action) => {
   switch (action.type){
+    case SET_ADD_THREAD_LOADING: 
+    return {
+        ...state,
+        loading: action.payload
+    }
     case SET_ADD_THREAD_TEXT: 
     return {
         ...state,
@@ -30,6 +35,8 @@ export const addThreadReducer = (state = initialState, action) => {
             ]
         }
     }
+    case CLEAR_ADD_THREAD_DATA:
+    return initialState;
     case SET_ADD_THREAD_ERROR:
     return {
         ...state,

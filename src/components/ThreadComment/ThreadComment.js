@@ -1,17 +1,30 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { GRAY_TEXT, USER_IMAGE_URL } from '../../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActionButtons from '../ActionButtons/ActionButtons';
 import ActionButton from '../ActionButton/ActionButton';
-const ThreadComment = ({comment, hideReplies, haveReply, addReply}) => {
+import { useDispatch } from 'react-redux';
+import { setCommentLike } from '../../store/actions/branchActions';
+const ThreadComment = ({comment, hideReplies, haveReply, addReply, user}) => {
     //console.log(comment, '----comm')
+    const [isLiked, setIsLiked] = useState(false)
+    const dispatch = useDispatch();
+    useEffect(()=> {
+      setIsLiked(Boolean(comment.likes.find(like => like.user_id === user.id)))
+    }, [comment.likes])
+    //console.log(isLiked)
     const replyInfo = comment?.reply_info[0];
     const desiredDate = new Date(comment.created_at);
     const currentDate = new Date();
     const timeDifference = currentDate - desiredDate;
     const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
+
+    const handleLike = () => {
+      console.log(comment.id, '-----> comment id')
+      dispatch(setCommentLike(user.id, comment.id));
+    }
     return (
       <CommentContainer>
       <ImageContainer>
@@ -39,7 +52,7 @@ const ThreadComment = ({comment, hideReplies, haveReply, addReply}) => {
         </UserInfoContainer>
         <Text>{comment.comment_data}</Text>
         <ActionButtons>
-          <ActionButton size={28} name='heart-outline' handleClick={()=>{console.log('like')}} />
+          <ActionButton size={28} name={isLiked ? 'heart' : 'heart-outline'} color={isLiked ? '#c92246' : '#000'} handleClick={handleLike} />
           {comment.reply_to === null &&
           <ActionButton name='chatbubble-outline' handleClick={()=>(addReply({name: comment.user_name, commentId: comment.id}))} />
           }

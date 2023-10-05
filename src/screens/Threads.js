@@ -5,12 +5,10 @@ import { loadThreads, setLoading } from '../store/actions/threadsActions';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCallback } from 'react';
-import { useState } from 'react';
 
 const Threads = ({navigation}) => { 
   
   const threads = useSelector(state=> state.threads.threads)
-  //console.log(threads, '---->threads threads');
   const user = useSelector(state => state.user.user);
   const loading = useSelector(state=> state.threads.loading)
   const onRefresh = useCallback(() => {

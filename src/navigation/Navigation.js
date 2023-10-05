@@ -1,6 +1,4 @@
-import { createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Profile from '../screens/Profile'
 import Threads from '../screens/Threads'
 import { Image, TextInput } from 'react-native'
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
@@ -8,20 +6,14 @@ import Users from '../screens/Users'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styled from 'styled-components'
 import Login from '../screens/Login'
-import { useEffect } from 'react'
-
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Register from '../screens/Register'
-import EditProfile from '../screens/EditProfile'
-import { createStackNavigator } from '@react-navigation/stack'
 import ProfileNavigation from './ProfileNavigation'
-import UserEditWindow from '../screens/UserEditWindow'
 import Branch from '../screens/Branch'
 import AddThread from '../screens/AddThread'
 
 
 const Navigation = createBottomTabNavigator()
-const Stack = createStackNavigator()
 export default () => {
     const userIsAuth = useSelector(state=> state.user.isLogined);
     return userIsAuth 
@@ -50,7 +42,7 @@ export default () => {
                         headerShown: false,
                         tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' size={28}/>)
                     }} component={Users}/>
-                    <Navigation.Screen name='Branch' options={({navigation})=> ({
+                    <Navigation.Screen name='Branch' backBehavior={'none'} options={({navigation})=> ({
                         headerTitle: 'Гілка',
                         tabBarStyle: {display: 'none'},
                         headerLeft: ()=> {

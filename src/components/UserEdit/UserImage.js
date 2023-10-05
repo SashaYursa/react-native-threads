@@ -17,7 +17,7 @@ const UserImage = ({userImage}) => {
   const dispatch = useDispatch();
   const chooseImage = async () => {
     const res = await ImagePicker.launchImageLibraryAsync({
-      quality: 1,
+      quality: 0.3,
       allowsEditing: true,
       aspect: [200, 200]
     })
