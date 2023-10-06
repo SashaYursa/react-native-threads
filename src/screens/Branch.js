@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addCommentReply, addThreadComment, loadBranch, loadCommentReplies } from '../store/actions/branchActions'
+import { addCommentReply, addThreadComment, loadBranch, loadCommentReplies, setBranchLike } from '../store/actions/branchActions'
 import Thread from '../components/Thread/Thread'
 import { ActivityIndicator, TextInput } from 'react-native-paper'
 import styled from 'styled-components'
@@ -41,6 +41,9 @@ const Branch = ({route, navigation}) => {
   const removeReplyToComment = () => {
     setReplyTo(null);
   }
+  const addLike = (threadId) => {
+      dispatch(setBranchLike(user.id, threadId));
+  }
 
   const showReplies = (comment) => {
     dispatch(loadCommentReplies(comment.id))
@@ -51,7 +54,7 @@ const Branch = ({route, navigation}) => {
   <View style={{backgroundColor: '#fff', flex: 1, flexDirection: 'column'}}>
   <ScrollView>
     
-      <Thread thread={thread} displayReply={false} navigation={navigation} />
+      <Thread thread={thread} displayReply={false} navigation={navigation} addLike={addLike} />
       <CommentsContainer>
       { comments
         ? comments.map((comment, i) => {

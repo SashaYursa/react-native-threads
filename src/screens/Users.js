@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
 import SearchUser from '../components/SearchUser/SearchUser';
 
-const Users = () => {
+const Users = ({navigation}) => {
   const userId = useSelector(state => state.user.user.id);
   const dispatch = useDispatch();
   useEffect(()=>{
@@ -29,7 +29,7 @@ const Users = () => {
         <SearchInput placeholder='Пошук'/>
       </SearchContainer>
       <UsersContainer>
-        {users.map(user=>(<SearchUser key={user.id} user={user}/>))}
+        {users.map(user=>(<SearchUser navigation={navigation} key={user.id} user={user}/>))}
       </UsersContainer>
     </ScrollView>
     </Container>

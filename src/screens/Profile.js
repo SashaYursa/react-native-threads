@@ -8,6 +8,8 @@ import { removeUser } from '../store/actions/UserActions'
 import { ActivityIndicator } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadUserThreads } from '../store/actions/userThreadsActions'
+import ProfileInfo from '../components/ProfileInfo/ProfileInfo'
+import ProfileContainer from '../components/ProfileContainer/ProfileContainer'
 
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -15,7 +17,6 @@ const Profile = ({ navigation }) => {
   const loading = useSelector(state => state.user.loading)
   const threads = useSelector(state=> state.userThreads.threads)
   const threadsLoading = useSelector(state=> state.userThreads.loading)
-  console.log(threadsLoading, '---->threadsLoading');
   const logOut = async () => {
     await AsyncStorage.removeItem('userId');
     dispatch(removeUser())
@@ -27,21 +28,14 @@ const Profile = ({ navigation }) => {
   const moveToBranch = (thread) => {
     navigation.navigate('Branch', {thread});
   }
+  const addLike = (threadId) => {
+    console.log(threads)
+  }
   return loading 
   ? ( <ActivityIndicator size={'large'}/> ) 
   : (
-    <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
-    <Container>
-      <UserInfoContainer>
-      <UserInfo>
-        <Name>{user.name}</Name>
-        <Description>{user.description}</Description>
-        <Subscribers>{user.subs} підписників</Subscribers>
-      </UserInfo> 
-      <ImageContainer>
-        <UserImage source={{uri: user.image}} />
-      </ImageContainer>
-      </UserInfoContainer>
+      <ProfileContainer>
+      <ProfileInfo user={user}/>
       <ActionsContainer>
         <ActionButton onPress={()=> navigation.navigate('UserEditWindow')}>
           <ActionText>Редагувати профіль</ActionText>
@@ -58,7 +52,7 @@ const Profile = ({ navigation }) => {
         {threads
         ? threads.map(thread=>(
           <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
-            <Thread displayReply={true} thread={thread}/>
+            <Thread displayReply={true} thread={thread} addLike={addLike}/>
           </TouchableOpacity>))
         : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
       }
@@ -67,59 +61,9 @@ const Profile = ({ navigation }) => {
         <ActivityIndicator size={'small'}/>
       </View>)
       }
-    </Container>
-    </ScrollView>
+    </ProfileContainer>
   )
 }
-
-const Container = styled.View`
-flex: 1;
-margin: 0;
-padding: 0;
-background: #fff;
-`
-const UserInfoContainer = styled.View`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-padding: 10px;
-`
-
-const UserInfo = styled.View`
-flex: 1;
-justify-content: start;
-display: flex;
-flex-direction: column;
-gap: 5px;
-`
-const ImageContainer = styled.TouchableOpacity`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-items: center;
-  justify-content: start;
-`
-const UserImage = styled.Image`
-width: 70px;
-height: 70px;
-border-radius: 45px;
-background-color: #000;
-`
-const Name = styled.Text`
-font-size: 26px;
-font-weight: 700;
-`
-const Description = styled.Text`
-font-size: 16px;
-font-weight: 400;
-`
-
-const Subscribers = styled.Text`
-  font-size: 16px;
-  color: ${GRAY_TEXT};
-`
-
-
 
 const ActionsContainer = styled.View`
 display: flex;

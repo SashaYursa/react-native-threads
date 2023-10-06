@@ -11,6 +11,7 @@ import Register from '../screens/Register'
 import ProfileNavigation from './ProfileNavigation'
 import Branch from '../screens/Branch'
 import AddThread from '../screens/AddThread'
+import Person from '../screens/Person'
 
 
 const Navigation = createBottomTabNavigator()
@@ -54,6 +55,18 @@ export default () => {
                         },
                         tabBarButton: ()=> null,
                     })} component={Branch}/>
+                    <Navigation.Screen name='Person' backBehavior={'none'} options={({navigation})=> ({
+                        headerTitle: '',
+                        tabBarStyle: {display: 'none'},
+                        headerLeft: ()=> {
+                            return (
+                                <Icon style={{marginLeft: 10}} size={30} onPress={()=>{
+                                    navigation.goBack()
+                                }} name="arrow-back-outline"/>
+                              )
+                        },
+                        tabBarButton: ()=> null,
+                    })} component={Person}/>
             </Navigation.Navigator>
         </NavigationContainer>
     )

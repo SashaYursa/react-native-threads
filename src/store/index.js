@@ -5,6 +5,7 @@ import { usersReducer } from "./reducers/users";
 import { branchReducer } from "./reducers/branch";
 import { userThreadsReducer } from "./reducers/userThreads";
 import { addThreadReducer } from "./reducers/addThread";
+import { personReducer } from "./reducers/person";
 
 const rootReducer = combineReducers({
     threads: threadsReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     users: usersReducer,
     branch: branchReducer,
     addThread: addThreadReducer,
+    person: personReducer
 })
 
 export default configureStore({

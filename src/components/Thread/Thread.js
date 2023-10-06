@@ -13,7 +13,8 @@ import { setLike } from '../../store/actions/threadsActions';
 import { useEffect } from 'react';
 
 const width = Dimensions.get('window').width;
-const Thread = ({thread, displayReply, navigation}) => {
+const Thread = ({thread, displayReply, navigation, addLike}) => {
+    console.log('rerender')
     const [imageOpened, setimageOpened] = useState(false);
     const currentDate = new Date();
     const user = useSelector(state=> state.user.user);
@@ -26,9 +27,6 @@ const Thread = ({thread, displayReply, navigation}) => {
     const desiredDate = new Date(thread.created_at);
     const timeDifference = currentDate - desiredDate;
     const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
-    const handleLike = () => {
-        dispatch(setLike(user.id, thread.id));
-    }
     const addComment = () => {
         navigation.navigate('Branch', {thread, openComment: true});
     }
@@ -92,7 +90,7 @@ const Thread = ({thread, displayReply, navigation}) => {
             </ScrollView>
             }
             <ActionButtons>
-                <ActionButton size={28} name={isLiked ? 'heart' : 'heart-outline'} color={isLiked ? '#c92246' : '#000'} handleClick={handleLike} />
+                <ActionButton size={28} name={isLiked ? 'heart' : 'heart-outline'} color={isLiked ? '#c92246' : '#000'} handleClick={()=> addLike(thread.id)} />
                 <ActionButton name='chatbubble-outline' handleClick={addComment} />
                 <ActionButton name='git-compare-outline' handleClick={repostThread} />
                 <ActionButton name='paper-plane-outline' handleClick={sendThread} />

@@ -20,20 +20,14 @@ export const setLoading = (loading) => {
 }
 export const setLike = (userId, threadId) => {
     return async dispatch => {
-        await axios.put(DEFAULT_API_URL + 'threads/like', {userId, threadId})
-        .then(data=> {
-            const result = data.data
-            
-            if(result.status === 'removed'){
-                dispatch({type: REMOVE_LIKE, payload: {likeId:result.data, threadId}})
-            }
-            else{
-                dispatch({type: SET_LIKE, payload: {data: {id:result.data, thread_id: threadId, user_id: userId}, threadId}})
-            }
-        })
-        .catch(error => {
-            console.log('exeption in threadsActions->setLike' , error)
-        })
+        const likes = await sendLike(userId, threadId)
+        console.log(likes, 'likes =>>>.')
+        if(likes.status === 'removed'){
+            dispatch({type: REMOVE_LIKE, payload: {likeId:likes.data, threadId}})
+        }
+        else{
+            dispatch({type: SET_LIKE, payload: {data: {id:likes.data, thread_id: threadId, user_id: userId}, threadId}})
+        }
     }
 }
 
@@ -41,4 +35,11 @@ export const removeThreads = () => {
     return async dispatch => {
         dispatch({type: REMOVE_THREAD, payload: []});
     }
+}
+export const sendLike = async (userId, threadId) => {
+    return await axios.put(DEFAULT_API_URL + 'threads/like', {userId, threadId})
+    .then(data => data.data)
+    .catch(error => {
+        console.log('exeption in threadsActions->sendLike' , error)
+    })
 }

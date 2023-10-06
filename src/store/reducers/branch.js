@@ -1,4 +1,4 @@
-import { LOAD_BRANCH_COMMENTS, SET_LOADING, SET_THREAD, ADD_COMMENT, SET_REPLIES, REMOVE_PREVIEW_IMAGES, ADD_REPLY, REMOVE_COMMENT_LIKE, SET_COMMENT_LIKE } from '../types'
+import { LOAD_BRANCH_COMMENTS, SET_LOADING, SET_THREAD, ADD_COMMENT, SET_REPLIES, REMOVE_PREVIEW_IMAGES, ADD_REPLY, REMOVE_COMMENT_LIKE, SET_COMMENT_LIKE, SET_BRANCH_LIKE, REMOVE_BRANCH_LIKE } from '../types'
 
 const initialState = {
   thread: {},
@@ -56,10 +56,33 @@ export const branchReducer = (state = initialState, action) => {
         ]
       }
     case REMOVE_PREVIEW_IMAGES: 
-    // const modifiedComment = state.comments.filter(comment => comment.id = action.payload);
-    // console.log('modifiedComment->>>',modifiedComment )
     return {
       ...state
+    }
+    case SET_BRANCH_LIKE:
+    return {
+      ...state,
+      thread: {
+        ...state.thread,
+        likes_count: state.thread.likes_count + 1,
+        likes: [
+          ...state.thread.likes,
+          action.payload.data
+        ]
+      }
+    }
+    case REMOVE_BRANCH_LIKE: 
+    const filteredLikes = state.thread.likes.filter(like => parseInt(like.id) !== parseInt(action.payload.likeId))
+    console.log(filteredLikes, 'filtered');
+    return {
+      ...state, 
+      thread: {
+        ...state.thread,
+        likes_count: state.thread.likes_count - 1,
+        likes: [
+          ...filteredLikes
+        ]
+      }
     }
     case REMOVE_COMMENT_LIKE:
       const withRemovedLike = JSON.parse(JSON.stringify(state.comments))

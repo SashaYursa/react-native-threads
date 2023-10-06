@@ -10,3 +10,15 @@ export const loadUserThreads = (userId) => {
         })
     }
 }
+export const addSelfThreadLike = (userId, threadId) => {
+    return async dispatch => {
+        const likes = await sendLike(userId, threadId)
+        console.log(likes, 'likes =>>>.')
+        if(likes.status === 'removed'){
+            dispatch({type: REMOVE_LIKE, payload: {likeId:likes.data, threadId}})
+        }
+        else{
+            dispatch({type: SET_LIKE, payload: {data: {id:likes.data, thread_id: threadId, user_id: userId}, threadId}})
+        }
+    }
+}

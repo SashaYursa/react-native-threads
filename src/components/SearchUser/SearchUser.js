@@ -5,7 +5,7 @@ import { GRAY_TEXT, USER_IMAGE_URL } from '../../constants'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { handleSubscribe } from '../../store/actions/usersActions'
-const SearchUser = ({user}) => {
+const SearchUser = ({user, navigation}) => {
     const subscribeInProgress = useSelector(state => state.users.subscribeInProgress);
     const userId = useSelector(state => state.user.user.id);
     const isSubscribed = user.isSubscribed
@@ -17,12 +17,15 @@ const SearchUser = ({user}) => {
         text: "Підписатися",
         style: {fontWeight: 700, color: '#000'}
     }
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleSubscribeButton = () => {
     dispatch(handleSubscribe(userId, user.id));
   }
+  const moveToUser = () => {
+    navigation.navigate('Person', {id: user.id, name: user.name, description: user.description, image: user.image})
+  }
   return (
-    <UserItem>
+    <UserItem onPress={moveToUser}>
       <ImageContainer>
       {user.image 
       ? <UserImage source={{uri: user.image}}/>
