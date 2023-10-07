@@ -1,29 +1,57 @@
 import { useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileInfo from '../components/ProfileInfo/ProfileInfo';
 import ProfileContainer from '../components/ProfileContainer/ProfileContainer';
 import styled from 'styled-components';
+import { loadPersonData, loadPersonThreads } from '../store/actions/personActions';
+import Thread from '../components/Thread/Thread';
+import { ActivityIndicator } from 'react-native-paper';
+import { GRAY_TEXT } from '../constants';
 
 const Person = ({ route }) => {
-  const userData = route.params;
+  const routeData = route.params;
   const dispatch = useDispatch();
+  const personThreads = useSelector(state => state.person.personThreads);
+  const personData = useSelector(state => state.person.personInfo.data);
+  console.log(personData, '-----adata')
+  const user = useSelector(state => state.user.user);
+  const threads = personThreads.threads;
   useEffect(()=> {
-    console.log('changed')
-
+    dispatch(loadPersonData(user.id, routeData));
+    dispatch(loadPersonThreads(routeData.id));
   }, [route.params])
-  console.log(userData)
+  console.log(personData, '---->data')
+  const addLike = () => {
+    console.log('add Like person window')
+  }
   return (
 <ProfileContainer>
-      <ProfileInfo user={userData}/>
+      {personData && 
+      <ProfileInfo user={personData}/>
+      }
       <ActionsContainer>
         <ActionButton onPress={()=> {}}>
-          <ActionText>Підписатися</ActionText>
+          <ActionText style={personData?.isSubscribed ? {color: GRAY_TEXT} : {color: '#000'}}>{!personData?.isSubscribed ? 'Підписатися' : 'Відписатися'}</ActionText>
         </ActionButton>
         <ActionButton>
           <ActionText>Поширити</ActionText>
         </ActionButton>
       </ActionsContainer>
+      { !personThreads.loading
+      ? (<View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
+        {threads.length
+        ? threads.map(thread=>(
+          <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
+            <Thread displayReply={true} thread={thread} addLike={addLike}/>
+          </TouchableOpacity>))
+        : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
+      }
+      </View>)
+      : (<View style={{flex: 1, backgroundColor: '#fff', marginTop: 30}}>
+        <ActivityIndicator size={'small'}/>
+      </View>)
+      }
     </ProfileContainer>
   )
 }

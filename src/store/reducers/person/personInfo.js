@@ -1,4 +1,4 @@
-import { SET_PERSON_DATA } from "../../types"
+import { SET_PERSON_DATA, SET_PERSON_DATA_LOADING } from "../../types"
 
 const initialState = {
     data: {},
@@ -9,10 +9,16 @@ const initialState = {
 export const personInfo = (state = initialState, action) => {
     switch (action.type){
       case SET_PERSON_DATA: 
+      console.log(action.payload, '-------payload')
       return {
           ...state,
+          data: action.payload,
           loading: action.false,
-          data: action.payload
+      }
+      case SET_PERSON_DATA_LOADING: 
+      return {
+        ...state,
+        loading: action.payload
       }
       default: return state;
     }

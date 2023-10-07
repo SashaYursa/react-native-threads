@@ -1,4 +1,4 @@
-import { SET_PERSON_THREADS } from "../../types"
+import { SET_PERSON_THREADS, SET_PERSON_THREADS_LOADING } from "../../types"
 
 const initialState = {
     threads: {},
@@ -14,6 +14,11 @@ export const personThreads = (state = initialState, action) => {
           loading: action.false,
           threads: action.payload
       }
+      case SET_PERSON_THREADS_LOADING:
+        return {
+          ...state, 
+          loading: action.payload
+        }
       default: return state;
     }
 }

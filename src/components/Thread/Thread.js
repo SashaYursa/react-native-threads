@@ -16,6 +16,7 @@ const width = Dimensions.get('window').width;
 const Thread = ({thread, displayReply, navigation, addLike}) => {
     console.log('rerender')
     const [imageOpened, setimageOpened] = useState(false);
+    const [openedImageIndex, setOpenedImageIndex] = useState(0)
     const currentDate = new Date();
     const user = useSelector(state=> state.user.user);
     const [isLiked, setIsLiked] = useState(false)
@@ -37,13 +38,14 @@ const Thread = ({thread, displayReply, navigation, addLike}) => {
         console.log('sendThread')
     }
     
-    const openImage = () => {
-         setimageOpened(true);
+    const openImage = (imageId) => {
+        setOpenedImageIndex(imageId);
+        setimageOpened(true);
     }
 
     if(imageOpened) return(<ImageView
         images={images}
-        imageIndex={0}
+        imageIndex={openedImageIndex}
         visible={imageOpened}
         onRequestClose={() => setimageOpened(false)}
       />)
@@ -85,7 +87,7 @@ const Thread = ({thread, displayReply, navigation, addLike}) => {
                         horizontal={true} 
                         style={{overflow: 'visible', paddingLeft: 70, left: -75, width}}> 
                 <View style={{flexDirection: 'row', gap: 10, marginTop: 10, marginEnd: 75}}>
-                    {thread.images.map((image, i) => <ThreadImage key={image.image_name + i} openImage={openImage} image={image}/>)}
+                    {thread.images.map((image, i) => <ThreadImage key={image.image_name + i} index={i} openImage={openImage} image={image}/>)}
                 </View>
             </ScrollView>
             }
@@ -149,9 +151,9 @@ justify-content: space-between;
 gap: 10px;
 `
 
-const ThreadImage = ({image, openImage}) => {
+const ThreadImage = ({image, openImage, index}) => {
     return (
-        <TouchableOpacity onPress={openImage} activeOpacity={1}>
+        <TouchableOpacity onPress={() => openImage(index)} activeOpacity={1}>
             <Image
              style={{backgroundColor: '#dedede', borderRadius: 8, width: 300, height: 300}} source={{uri: THREAD_IMAGE_URL + image.image_name}}
              />
