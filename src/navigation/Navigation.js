@@ -39,7 +39,8 @@ export default () => {
                         title: 'Профіль',
                         tabBarIcon: ({focused})=>(focused ?<Icon name='person-circle' size={28}/> : <Icon name='person-circle-outline' size={28}/>)
                     }} component={ProfileNavigation}/>
-                    <Navigation.Screen name='Користувачі' options={{
+                    <Navigation.Screen name='Users' options={{
+                        headerTitle: 'Користувачі',
                         headerShown: false,
                         tabBarIcon: ({focused})=>(focused ?<Icon name='people' size={28}/> : <Icon name='people-outline' size={28}/>)
                     }} component={Users}/>
@@ -49,7 +50,7 @@ export default () => {
                         headerLeft: ()=> {
                             return (
                                 <Icon style={{marginLeft: 10}} size={30} onPress={()=>{
-                                    navigation.goBack()
+                                    navigation.goBack();
                                 }} name="arrow-back-outline"/>
                               )
                         },
@@ -61,7 +62,8 @@ export default () => {
                         headerLeft: ()=> {
                             return (
                                 <Icon style={{marginLeft: 10}} size={30} onPress={()=>{
-                                    navigation.goBack()
+                                    console.log(navigation)
+                                    navigation.navigate('Users')
                                 }} name="arrow-back-outline"/>
                               )
                         },

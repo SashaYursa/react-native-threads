@@ -88,6 +88,7 @@ export const compareUsers = (user, editUser) => {
 }
 }
 export const updateUser = (user) => {
+    console.log(user.id, '--->update id')
     return async dispatch => {
         if(user){
             return axios.put(DEFAULT_API_URL + `users/${user.id}`, {...user})

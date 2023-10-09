@@ -23,33 +23,38 @@ export const threadsReducer = (state = initialState, action) => {
       loading: true
     }
     case SET_LIKE: 
-    let copyToSet = JSON.parse(JSON.stringify(state.threads))
-    copyToSet = copyToSet.map(thread => {
-     if(thread.id === action.payload.threadId){
-      thread.likes_count = thread.likes_count + 1
-      thread.likes.push(action.payload.data);
-    }
-     return thread
-    })
     return {
       ...state,
       threads: [
-        ...copyToSet
+        ...state.threads.map(thread => {
+          if(thread.id === action.payload.threadId){
+            return {
+              ...thread,
+              likes_count: thread.likes_count + 1, 
+              likes: [
+                ...thread.likes,
+                action.payload.data
+              ]
+            }
+          }
+          return thread;
+        })
       ]
     }
     case REMOVE_LIKE: 
-    let copyToRemove = JSON.parse(JSON.stringify(state.threads))
-    copyToRemove = copyToRemove.map(thread => {
-     if(thread.id === action.payload.threadId){
-      thread.likes_count = thread.likes_count - 1
-      thread.likes = thread.likes.filter(like => parseInt(like.id) !== parseInt(action.payload.likeId))
-    }
-     return thread
-    })
     return {
       ...state,
       threads: [
-        ...copyToRemove
+        ...state.threads.map(thread => {
+          if(thread.id === action.payload.threadId){
+            return {
+              ...thread,
+              likes_count: thread.likes_count - 1, 
+              likes: thread.likes.filter(like => parseInt(like.id) !== parseInt(action.payload.likeId))
+            }
+          }
+          return thread;
+        })
       ]
     }
     default: return state;

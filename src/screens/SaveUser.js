@@ -23,7 +23,8 @@ const SaveUser = ({navigation}) => {
           name: updatedUser.name,
           description: updatedUser.description,
           is_private: updatedUser.is_private,
-          password: updatedUser.password
+          password: updatedUser.password,
+          id: user.id
         }));
     }
     else{

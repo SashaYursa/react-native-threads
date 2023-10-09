@@ -1,5 +1,5 @@
 import { View, ScrollView, TouchableOpacity, RefreshControl } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Thread from '../components/Thread/Thread';
 import { loadThreads, setLike, setLoading } from '../store/actions/threadsActions';
 import { ActivityIndicator } from 'react-native-paper';
@@ -23,11 +23,14 @@ const Threads = ({navigation}) => {
   const moveToBranch = (thread) => {
     navigation.navigate('Branch', {thread, openComment: false});
   }
-  const addLike = (threadId) => {
+  const addLike = useMemo(()=>(threadId) => {
     dispatch(setLike(user.id, threadId));
-}
-
-  
+  }, [])
+  const subscribeToPerson =  (personId) => {
+    console.log(personId, 'subscribed')
+  }
+  const [nav, setNav] = useState(()=> {console.log('re'); return addLike})
+  console.log(Object.is(addLike, nav), 'obj is');
   return loading 
   ? (
     <View style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>

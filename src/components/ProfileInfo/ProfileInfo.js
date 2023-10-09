@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import styled from 'styled-components'
-import { GRAY_TEXT } from '../../constants'
+import { GRAY_TEXT, USER_IMAGE_URL } from '../../constants'
 const ProfileInfo = ({user}) => {
   return (
     <UserInfoContainer>

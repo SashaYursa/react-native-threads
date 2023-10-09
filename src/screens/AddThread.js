@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Icon from 'react-native-vector-icons/Ionicons'
 import ThreadAdditions from '../components/ThreadAdditions/ThreadAdditions'
 import { useDispatch, useSelector } from 'react-redux'
-import { GRAY_TEXT } from '../constants'
+import { GRAY_TEXT, USER_IMAGE_URL } from '../constants'
 import { addThread, clearData, deleteThreadError, setAddThreadLoading, setThreadError, setThreadTextToStore  } from '../store/actions/addThreadActions'
 import ModalInfoWindow from '../components/ModalInfoWindow/ModalInfoWindow'
 import { ActivityIndicator } from 'react-native-paper'
@@ -13,6 +13,7 @@ const AddThread = ({navigation}) => {
     const dispatch = useDispatch();
     const errors = useSelector(state => state.addThread.errors);
     const user = useSelector(state => state.user.user);
+    console.log(user)
     const newThread = useSelector(state => state.addThread.thread);
     const loading = useSelector(state => state.addThread.loading);
     const [threadText, setThreadText] = useState(newThread.text)
@@ -54,21 +55,23 @@ const AddThread = ({navigation}) => {
     const moveToMain = () => {
         setModalIsOpen(false);
         dispatch(clearData());
+        setThreadText('');
         navigation.navigate('Threads');
     }
     const addMoreThread = () => {
         dispatch(clearData());
+        setThreadText('');
         setModalIsOpen(false);
     }
   return (
     <View style={{flex: 1, overflow: 'hidden'}}>
         <AddThreadContainer>
             <ImageContainer>
-                <Image style={{width: 40, height: 40, borderRadius: 20, objectFit: 'contain'}} source={{uri: 'https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_1280.jpg'}}/>
+                <Image style={{width: 40, height: 40, borderRadius: 20, objectFit: 'contain', backgroundColor: 'gray'}} source={{uri: user.image}}/>
             </ImageContainer>
             <DataContainer>
                 <UserNameContainer>
-                <UserName>Alex</UserName>     
+                <UserName>{user.name}</UserName>     
                 </UserNameContainer>
                 <FormContainer>
                     <ThreadInput multiline={true} style={errors?.textError ? {color: 'red'} : {color: '#000'}} value={threadText} onChangeText={changeText} placeholder="Напишіть щось..."/>
