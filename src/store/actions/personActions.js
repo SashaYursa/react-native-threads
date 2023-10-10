@@ -3,7 +3,7 @@ import { SET_PERSON_DATA, SET_PERSON_DATA_LOADING, SET_PERSON_LIKE, SET_PERSON_S
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 import { subscribe } from "./usersActions";
 import { sendLike } from "./threadsActions";
-
+import instance from "../API/api";
 export const loadPersonData = (userId, routeData) => {
     return async dispatch => {
         dispatch(setLoadingPersonData(true));
@@ -27,17 +27,17 @@ export const setLoadingPersonData = (loadingStatus) => {
 export const loadPersonThreads = (userId) => {
     return async dispatch => {
         dispatch({type: SET_PERSON_THREADS_LOADING, payload: true});
-        await axios.get(DEFAULT_API_URL + `threads/user/${userId}`)
+        await instance.get(`threads/user/${userId}`)
         .then(threads=> {
             dispatch({type: SET_PERSON_THREADS, payload: threads.data})
         })
     }
 }
-export const personSubscribe = (userId, subscribeTo) => {
+export const personSubscribe = (subscribeTo) => {
     
     return async dispatch => {
         dispatch({type: SET_PERSON_DATA_LOADING, payload: true})
-        let res = await subscribe(userId, subscribeTo);
+        let res = await subscribe(subscribeTo);
         if(res.status){
             dispatch({type: SET_PERSON_DATA_LOADING, payload: false});
             if(res.type === 'subscribe'){

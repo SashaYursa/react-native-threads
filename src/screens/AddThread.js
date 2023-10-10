@@ -13,13 +13,11 @@ const AddThread = ({navigation}) => {
     const dispatch = useDispatch();
     const errors = useSelector(state => state.addThread.errors);
     const user = useSelector(state => state.user.user);
-    console.log(user)
     const newThread = useSelector(state => state.addThread.thread);
     const loading = useSelector(state => state.addThread.loading);
     const [threadText, setThreadText] = useState(newThread.text)
     const [emptyErrors, setEmptyErrors] = useState(true);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    console.log(loading, '->>>> loading');
     useEffect(()=> {
         if(Object.keys(errors).length === 0){
             setEmptyErrors(true)

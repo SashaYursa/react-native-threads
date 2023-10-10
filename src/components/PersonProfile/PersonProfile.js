@@ -11,14 +11,13 @@ import { useState } from 'react';
 
 const PersonProfile = ({personData, personDataLoading, userId}) => {
     const [disableButton, setDisable] = useState(false); 
-    console.log(disableButton, 'disable')
     useEffect(()=> {
         setDisable(personDataLoading)
     }, [personDataLoading])
   const dispatch = useDispatch();
   const handleSubscribe = () => {
     setDisable(true);
-    dispatch(personSubscribe(userId, personData.id));
+    dispatch(personSubscribe(personData.id));
   }
   return (
     <>

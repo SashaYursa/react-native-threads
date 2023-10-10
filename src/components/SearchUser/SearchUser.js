@@ -19,7 +19,7 @@ const SearchUser = ({user, navigation}) => {
     }
   const dispatch = useDispatch();
   const handleSubscribeButton = () => {
-    dispatch(handleSubscribe(userId, user.id));
+    dispatch(handleSubscribe(user.id));
   }
   const moveToUser = () => {
     navigation.navigate('Person', {id: user.id, name: user.name, description: user.description, image: user.image})

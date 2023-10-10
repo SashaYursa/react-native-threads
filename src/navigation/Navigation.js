@@ -62,7 +62,6 @@ export default () => {
                         headerLeft: ()=> {
                             return (
                                 <Icon style={{marginLeft: 10}} size={30} onPress={()=>{
-                                    console.log(navigation)
                                     navigation.navigate('Users')
                                 }} name="arrow-back-outline"/>
                               )

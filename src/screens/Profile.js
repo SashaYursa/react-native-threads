@@ -15,11 +15,14 @@ const Profile = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state=> state.user.user)
   const loading = useSelector(state => state.user.loading)
-  const threads = useSelector(state=> state.userThreads.threads)
-  const threadsLoading = useSelector(state=> state.userThreads.loading)
+  const threads = useSelector(state => state.userThreads.threads)
+  const threadsLoading = useSelector(state => state.userThreads.loading)
   const logOut = async () => {
     await AsyncStorage.removeItem('userId');
     dispatch(removeUser())
+  }
+  const  onRefresh = () => {
+    dispatch(loadUserThreads(user.id))
   }
   useEffect(()=> {
     dispatch(loadUserThreads(user.id))
@@ -34,7 +37,7 @@ const Profile = ({ navigation }) => {
   return loading 
   ? ( <ActivityIndicator size={'large'}/> ) 
   : (
-      <ProfileContainer>
+      <ProfileContainer refreshing={loading} onRefresh={onRefresh}>
       <ProfileInfo user={user}/>
       <ActionsContainer>
         <ActionButton onPress={()=> navigation.navigate('UserEditWindow')}>
@@ -52,7 +55,7 @@ const Profile = ({ navigation }) => {
         {threads
         ? threads.map(thread=>(
           <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
-            <Thread displayReply={true} thread={thread} addLike={addLike}/>
+            <Thread displayReply={true} thread={thread} addLike={addLike} navigation={navigation}/>
           </TouchableOpacity>))
         : (<View style={{alignItems: 'center',flex: 1, backgroundColor: '#fff' }}><Text style={{fontSize: 32}}>No content here</Text></View>)
       }

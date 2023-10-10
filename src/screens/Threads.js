@@ -29,8 +29,6 @@ const Threads = ({navigation}) => {
   const subscribeToPerson =  (personId) => {
     console.log(personId, 'subscribed')
   }
-  const [nav, setNav] = useState(()=> {console.log('re'); return addLike})
-  console.log(Object.is(addLike, nav), 'obj is');
   return loading 
   ? (
     <View style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>

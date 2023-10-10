@@ -1,17 +1,14 @@
 import { useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
-import ProfileInfo from '../components/ProfileInfo/ProfileInfo';
 import ProfileContainer from '../components/ProfileContainer/ProfileContainer';
-import styled from 'styled-components';
-import { loadPersonData, loadPersonThreads, personSubscribe, setPersonThreadLike } from '../store/actions/personActions';
+import { loadPersonData, loadPersonThreads, setPersonThreadLike } from '../store/actions/personActions';
 import Thread from '../components/Thread/Thread';
 import { ActivityIndicator } from 'react-native-paper';
-import { GRAY_TEXT } from '../constants';
 import PersonProfile from '../components/PersonProfile/PersonProfile';
 import { useMemo } from 'react';
 
-const Person = ({ route }) => {
+const Person = ({ route, navigation }) => {
   const routeData = route.params;
   const dispatch = useDispatch();
   const personThreads = useSelector(state => state.person.personThreads);
@@ -19,6 +16,10 @@ const Person = ({ route }) => {
   const personDataLoading = useSelector(state => state.person.personInfo.loading);
   const showThread = personData.is_private === 0 || (personData.isSubscribed && personData.is_private === 1)
   const user = useSelector(state => state.user.user);
+  const onRefresh = () => {
+    dispatch(loadPersonData(user.id, routeData));
+    dispatch(loadPersonThreads(routeData.id));
+  }
   useEffect(()=> {
     dispatch(loadPersonData(user.id, routeData));
     dispatch(loadPersonThreads(routeData.id));
@@ -26,12 +27,15 @@ const Person = ({ route }) => {
   const addLike = useMemo(()=>(threadId) => {
     dispatch(setPersonThreadLike(user.id, threadId));
   }, [])
+  const moveToBranch = (thread) => {
+    navigation.navigate('Branch', {thread});
+  }
   const threads = useMemo(()=>(!personThreads.threads.length ? <Text style={{fontSize: 18, alignSelf: 'center'}}>Треди відсутні</Text> : personThreads?.threads?.map(thread=>(
     <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
-      <Thread displayReply={true} thread={thread} addLike={addLike}/>
+      <Thread displayReply={true} thread={thread} addLike={addLike} navigation={navigation}/>
     </TouchableOpacity>))), [personThreads]);
   return (
-<ProfileContainer>
+<ProfileContainer refreshing={personThreads.loading} onRefresh={onRefresh}>
       <PersonProfile personData={personData} personDataLoading={personDataLoading} userId={user.id}/>
       {!personThreads.loading
       ? showThread 

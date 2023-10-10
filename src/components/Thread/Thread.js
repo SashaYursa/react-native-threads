@@ -11,25 +11,32 @@ import ActionButton from '../ActionButton/ActionButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLike } from '../../store/actions/threadsActions';
 import { useEffect } from 'react';
+import { personSubscribe } from '../../store/actions/personActions';
 
 const width = Dimensions.get('window').width;
-const Thread = memo(({thread, displayReply, navigation, addLike, subscribeToPerson = () => {}}) => {
-        console.log('thread is rerender')
+const Thread = memo(({thread, displayReply, navigation, addLike}) => {
         const [imageOpened, setimageOpened] = useState(false);
         const [openedImageIndex, setOpenedImageIndex] = useState(0)
         const currentDate = new Date();
         const user = useSelector(state=> state.user.user);
-        const [isLiked, setIsLiked] = useState(false)
+        const [isLiked, setIsLiked] = useState(false) 
         useEffect(()=> {
             setIsLiked(Boolean(thread.likes.find(like => like.user_id === user.id)))
         }, [thread.likes])
         const dispatch = useDispatch();
         const images = thread.images.map(image=> ({uri: THREAD_IMAGE_URL + image.image_name}))
+        const [subscribed, setSubscribed] = useState(thread.isSubscribed);
         const desiredDate = new Date(thread.created_at);
         const timeDifference = currentDate - desiredDate;
         const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
         const addComment = () => {
             navigation.navigate('Branch', {thread, openComment: true});
+        }
+        const subscribeToAuthor = () => {
+            if(!subscribed){
+                dispatch(personSubscribe(thread.author_id));
+                setSubscribed(3)
+            }
         }
         const repostThread = () => {
             console.log('repostThread')
@@ -46,13 +53,18 @@ const Thread = memo(({thread, displayReply, navigation, addLike, subscribeToPers
             <Container>
                 <RowContainer style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start', justifyContent: 'space-between'}}>
                     <LeftItemsContainer>
-                    <TouchableOpacity onPress={() => subscribeToPerson(thread)} style={{position: 'relative'}}>
+                    <TouchableOpacity onPress={subscribeToAuthor} style={{position: 'relative'}}>
                         <Image style={{width: 45, height: 45, borderRadius: 50, objectFit: 'cover'}} source={{uri: USER_IMAGE_URL + thread.author_image}}/>   
-                        {!thread?.isSubscribed &&
+                        {!subscribed &&
                         <View style={{backgroundColor: 'white', paddingLeft: 1.7, borderRadius: 50, position: 'absolute', top: 30, right: -5}}>
                             <Icon size={22} style={{}} name='add-circle'/>
                         </View>
-                        }         
+                        }   
+                        {subscribed === 3 &&
+                        <View style={{backgroundColor: 'white', paddingLeft: 1.7, borderRadius: 50, position: 'absolute', top: 30, right: -5}}>
+                            <Icon size={22} style={{}} name='checkmark-outline'/>
+                        </View>
+                        }      
                     </TouchableOpacity>
                     {(thread.comments.comments_count > 0 && displayReply) &&
                     <>

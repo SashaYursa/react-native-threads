@@ -1,11 +1,10 @@
 import axios from "axios";
 import { LOAD_USERS, HANDLE_SUBSCRIBE_PROGRESS, SET_USERS_SUBSCRIBE} from "../types";
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
-
+import instance from "../API/api";
 export const loadUsers = (userId) => {
-    console.log(userId, 'useriddidididididi')
     return async dispatch => {
-        await axios.get(DEFAULT_API_URL + `users?userId=${userId}`)
+        await instance.get(`users`)
         .then(users=>{
             users = users.data
             users.map(user=> {
@@ -22,11 +21,11 @@ export const loadUsers = (userId) => {
     }
 }
 
-export const handleSubscribe = (userId, subscribeTo) => {
+export const handleSubscribe = (subscribeTo) => {
 
     return async dispatch => {
         dispatch({type: HANDLE_SUBSCRIBE_PROGRESS, payload: true});
-        const res = await subscribe(userId, subscribeTo)
+        const res = await subscribe(subscribeTo)
         console.log(res)
         if(res.status){
             dispatch({type: HANDLE_SUBSCRIBE_PROGRESS, payload: false});
@@ -39,7 +38,7 @@ export const handleSubscribe = (userId, subscribeTo) => {
         }
     }
 }
-export const subscribe = async (userId, subscribeTo) => {
-    let result = await axios.post(DEFAULT_API_URL + `users?userId=${userId}`, {subscribeTo});
+export const subscribe = async (subscribeTo) => {
+    let result = await instance.post(`subscribe/${subscribeTo}`);
     return result.data;
 }

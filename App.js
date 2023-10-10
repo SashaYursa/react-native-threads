@@ -4,10 +4,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import Navigation from './src/navigation/Navigation';
 import { Provider } from 'react-redux';
 import store from './src/store';
-
 export default function App() {
   const [isLoading, setLoading] = useState(true);
-  console.log('rerender')
   SplashScreen.preventAutoHideAsync();
   useEffect(()=>{
     const l = async () => {

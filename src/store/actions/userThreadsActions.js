@@ -1,10 +1,11 @@
 import axios from "axios";
-import {LOAD_USER_THREADS } from "../types";
+import {LOAD_USER_THREADS, SET_LOADING_USER_THREADS } from "../types";
 import { DEFAULT_API_URL } from "../../constants";
-
+import instance from "../API/api";
 export const loadUserThreads = (userId) => {
     return async dispatch => {
-        await axios.get(DEFAULT_API_URL + `threads/user/${userId}`)
+        dispatch({type: SET_LOADING_USER_THREADS, payload: true});
+        await instance.get(`threads/user/${userId}`)
         .then(threads=> {
             dispatch({type: LOAD_USER_THREADS, payload: threads.data})
         })

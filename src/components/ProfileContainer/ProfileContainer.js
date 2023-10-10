@@ -1,10 +1,14 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, RefreshControl } from 'react-native'
 import React from 'react'
 import styled from 'styled-components'
 
-const ProfileContainer = ({children}) => {
+const ProfileContainer = ({children, refreshing, onRefresh}) => {
   return (
-    <ProfileBody>
+    <ProfileBody
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+    }
+    >
         <Container>
             {children}
         </Container>

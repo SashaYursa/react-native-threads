@@ -1,4 +1,4 @@
-import { LOAD_USER_THREADS} from '../types'
+import { LOAD_USER_THREADS, SET_LOADING_USER_THREADS} from '../types'
 
 const initialState = {
   threads: [],
@@ -12,6 +12,11 @@ export const userThreadsReducer = (state = initialState, action) => {
       threads: action.payload,
       loading: false
     }
+    case SET_LOADING_USER_THREADS:
+      return {
+        ...state,
+        loading: action.payload
+      }
     default: return state;
   }
 }

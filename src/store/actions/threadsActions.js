@@ -1,10 +1,10 @@
 import axios from "axios";
 import { LOAD_THREADS, SET_LIKE, REMOVE_THREAD, SET_THREADS_LOADING, REMOVE_LIKE } from "../types";
 import { DEFAULT_API_URL } from "../../constants";
-
+import instance from "../API/api";
 export const loadThreads = () => {
     return async dispatch => {
-        await axios.get(DEFAULT_API_URL + `threads`)
+        await instance.get(`threads`)
         .then(threads=> {
             dispatch({type: LOAD_THREADS, payload: threads.data})
         })
@@ -21,7 +21,6 @@ export const setLoading = (loading) => {
 export const setLike = (userId, threadId) => {
     return async dispatch => {
         const likes = await sendLike(userId, threadId)
-        console.log(likes);
         if(likes.status === 'removed'){
             dispatch({type: REMOVE_LIKE, payload: {likeId:likes.data, threadId}})
         }
@@ -37,7 +36,7 @@ export const removeThreads = () => {
     }
 }
 export const sendLike = async (userId, threadId) => {
-    return await axios.put(DEFAULT_API_URL + 'threads/like', {userId, threadId})
+    return await instance.put('threads/like', {userId, threadId})
     .then(data => data.data)
     .catch(error => {
         console.log('exeption in threadsActions->sendLike' , error)
