@@ -52,7 +52,7 @@ const Profile = ({ navigation }) => {
       </ActionsContainer>
       { !threadsLoading 
       ? (<View style={{flex: 1, backgroundColor: '#fff', flexDirection: 'column'}}>
-        {threads
+        {threads.length
         ? threads.map(thread=>(
           <TouchableOpacity key={thread.id} activeOpacity={1} onPress={()=>moveToBranch(thread)} style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3', flexDirection: 'column', marginTop: 10}}>
             <Thread displayReply={true} thread={thread} addLike={addLike} navigation={navigation}/>

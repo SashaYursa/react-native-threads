@@ -3,6 +3,7 @@ import { SET_USER, REMOVE_USER, SET_LOADING, SET_ERROR, SET_IS_LOGIN_EMPTY, UPDA
 import { DEFAULT_API_URL, USER_IMAGE_URL } from "../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from 'expo-file-system';
+import { registerIndieID } from 'native-notify';
 import instance from "../API/api";
 export const loadUser = (id) => {
     return async dispatch => {
@@ -30,7 +31,7 @@ export const loginUser = (credentials) => {
     return async dispatch => {
         dispatch({type: SET_LOADING, payload: true});
         await instance.patch(`users`, credentials)
-        .then(data => {
+        .then(async data => {
             const user = data.data;
             if(user === ''){
                 dispatch({type: SET_ERROR, payload: "Помилка"})
@@ -50,7 +51,7 @@ export const registerUser = (credentials) => {
     return async dispatch => {
         dispatch({type: SET_LOADING, payload: true});
         await instance.post(`users`, credentials)
-        .then(data => {
+        .then(async data => {
             const user = data.data;
             if(user === ''){
                 dispatch({type: SET_ERROR, payload: "Помилка"})
@@ -59,8 +60,10 @@ export const registerUser = (credentials) => {
                 dispatch({type: SET_ERROR, payload: translateErorrs(user?.message)})
             }
             else{
+                await registerIndieID(String(user.id), 13309, '9Sr3Pqbh3qfiyZsUNbVSTt');
                 setUserIdToStorage(user.id);
                 dispatch({type: SET_USER, payload: user})
+                
             }
         })
     }

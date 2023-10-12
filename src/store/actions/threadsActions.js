@@ -21,6 +21,7 @@ export const setLoading = (loading) => {
 export const setLike = (userId, threadId) => {
     return async dispatch => {
         const likes = await sendLike(userId, threadId)
+        console.log(likes)
         if(likes.status === 'removed'){
             dispatch({type: REMOVE_LIKE, payload: {likeId:likes.data, threadId}})
         }
