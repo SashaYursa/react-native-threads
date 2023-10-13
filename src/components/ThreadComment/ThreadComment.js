@@ -25,10 +25,12 @@ const ThreadComment = ({comment, hideReplies, haveReply, addReply, user}) => {
       console.log(comment.id, '-----> comment id')
       dispatch(setCommentLike(user.id, comment.id));
     }
+    const userImage = comment.user_image ? {uri: USER_IMAGE_URL + comment.user_image} : require('../../../assets/default-user-image.png');
+  
     return (
       <CommentContainer>
       <ImageContainer>
-        <UserImage source={{uri: USER_IMAGE_URL + comment.user_image}}/>
+        <UserImage source={userImage}/>
         {haveReply &&
         <ThreadElement/>
         } 
@@ -36,7 +38,7 @@ const ThreadComment = ({comment, hideReplies, haveReply, addReply, user}) => {
           <PreviewImages>
           {replyInfo.preview_images?.map((image, i) =>{ 
           return(
-              <Image key={i} style={{position: 'absolute', marginStart: 8.5, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
+              <Image key={i} style={{position: 'absolute', marginStart: 8.5, left: (8 * i), width: 15, backgroundColor: '#fff', height: 15, borderRadius: 7.5}} source={image.image ? {uri: USER_IMAGE_URL + image.image} : require('../../../assets/default-user-image.png')}/>
           )})}
           </PreviewImages>)
         }

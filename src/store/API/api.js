@@ -12,6 +12,7 @@ const defaultOptions = {
 
   instance.interceptors.request.use(async (config) => {
     const token = await AsyncStorage.getItem('userId');
+    console.log(token, ' token');
     config.headers.Authorization =  token ? token : '';
     return config;
   });

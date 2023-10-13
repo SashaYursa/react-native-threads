@@ -10,7 +10,6 @@ export const loadPersonData = (userId, routeData) => {
         dispatch({type: SET_PERSON_DATA, payload: routeData});
         await axios.get(DEFAULT_API_URL + `users/${routeData.id}?userId=${userId}`)
         .then(person => {
-            person.data.image = USER_IMAGE_URL + person.data.image;
             dispatch({type: SET_PERSON_DATA, payload: person.data})    
         })
         .catch(error=> {

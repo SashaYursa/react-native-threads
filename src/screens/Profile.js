@@ -18,8 +18,7 @@ const Profile = ({ navigation }) => {
   const threads = useSelector(state => state.userThreads.threads)
   const threadsLoading = useSelector(state => state.userThreads.loading)
   const logOut = async () => {
-    await AsyncStorage.removeItem('userId');
-    dispatch(removeUser())
+    dispatch(removeUser(user.id))
   }
   const  onRefresh = () => {
     dispatch(loadUserThreads(user.id))

@@ -45,7 +45,8 @@ export const addCommentReply = (comment, authorId, threadId, repliedCommentId) =
         console.log(comment, authorId, threadId, repliedCommentId)
         await axios.post(DEFAULT_API_URL + `comments/reply/${repliedCommentId}`, {comment, authorId, reply: repliedCommentId, threadId})
         .then(data=> {
-            dispatch({type: SET_REPLIES, payload: {commentId: repliedCommentId, replies: [data.data]}});
+            console.log(data.data, 'response reply')
+            dispatch({type: SET_REPLIES, payload: {commentId: repliedCommentId, replies: [data.data.comment]}});
         })
         .catch(error=> {
             console.log('--->>>>problem in branchActions->addCommentReply', error);

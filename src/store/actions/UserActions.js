@@ -17,9 +17,21 @@ export const loadUser = (id) => {
         })
     }
 }
-export const removeUser = () => {
+export const removeUser = (userId) => {
     return async dispatch => {
-        dispatch({type: REMOVE_USER})
+        await instance.delete(`logout`)
+        .then(async data => {
+            if(data.data){
+                const res = await axios.delete(`https://app.nativenotify.com/api/app/indie/sub/13309/9Sr3Pqbh3qfiyZsUNbVSTt/${userId}`)
+                console.log(res.data, 'logout');
+                dispatch({type: REMOVE_USER})
+                await AsyncStorage.removeItem('userId');
+            }
+        })
+        .catch(error => {
+            console.log('error in userActions->removeUser', error);
+        })
+        
     }
 }
 export const setError = (error) => {
@@ -40,6 +52,7 @@ export const loginUser = (credentials) => {
                 dispatch({type: SET_ERROR, payload: translateErorrs(user?.message)})
             }
             else{
+                await registerIndieID(String(user.id), 13309, '9Sr3Pqbh3qfiyZsUNbVSTt');
                 setUserIdToStorage(user.id);
                 dispatch({type: SET_USER, payload: user})
             }

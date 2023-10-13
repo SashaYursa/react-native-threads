@@ -61,11 +61,12 @@ const AddThread = ({navigation}) => {
         setThreadText('');
         setModalIsOpen(false);
     }
+    const userImage = user.image ? {uri: USER_IMAGE_URL + user.image} : require('../../assets/default-user-image.png');
   return (
     <View style={{flex: 1, overflow: 'hidden'}}>
         <AddThreadContainer>
             <ImageContainer>
-                <Image style={{width: 40, height: 40, borderRadius: 20, objectFit: 'contain', backgroundColor: 'gray'}} source={{uri: user.image}}/>
+                <Image style={{width: 40, height: 40, borderRadius: 20, objectFit: 'contain', backgroundColor: '#fff'}} source={userImage}/>
             </ImageContainer>
             <DataContainer>
                 <UserNameContainer>
@@ -83,7 +84,7 @@ const AddThread = ({navigation}) => {
         <AddThreadActions>
             <ErrorText>{errors?.imageError}</ErrorText>
             <ErrorText>{errors?.loadError}</ErrorText>
-            <ActionButton onPress={handleAddThread} disabled={!emptyErrors && newThread.text === ''}>
+            <ActionButton onPress={handleAddThread} disabled={!emptyErrors || newThread.text === ''}>
                 <ActionButtonText style={ emptyErrors && newThread.text !== '' ? {color: '#0f55f7'} : {color: GRAY_TEXT} }>Опублікувати</ActionButtonText>
             </ActionButton>
         </AddThreadActions>

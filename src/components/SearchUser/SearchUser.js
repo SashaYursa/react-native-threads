@@ -24,13 +24,12 @@ const SearchUser = ({user, navigation}) => {
   const moveToUser = () => {
     navigation.navigate('Person', {id: user.id, name: user.name, description: user.description, image: user.image})
   }
+  const userImage = user.image ? {uri: user.image} : require('../../../assets/default-user-image.png');
+  
   return (
     <UserItem onPress={moveToUser}>
       <ImageContainer>
-      {user.image 
-      ? <UserImage source={{uri: user.image}}/>
-      : <Icon style={{margin: 'auto'}} size={25} name='person-outline'/>
-      }
+        <UserImage source={userImage}/>
       </ImageContainer>
         <UserInfoContainer style={{borderBottomWidth: 1, borderBottomColor: '#e6e3e3'}}>
             <UserInfo>
@@ -53,6 +52,7 @@ const UserImage = styled.Image`
 width: 40px;
 height: 40px;
 border-radius: 20px;
+background-color: #fff;
 `
 const ImageContainer = styled.View`
 display: flex;

@@ -49,12 +49,13 @@ const Thread = memo(({thread, displayReply, navigation, addLike}) => {
             setOpenedImageIndex(imageId);
             setimageOpened(true);
         }
+        const userImage =  thread.author_image ? {uri: USER_IMAGE_URL +  thread.author_image} : require('../../../assets/default-user-image.png');
         return (
             <Container>
                 <RowContainer style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start', justifyContent: 'space-between'}}>
                     <LeftItemsContainer>
                     <TouchableOpacity onPress={subscribeToAuthor} style={{position: 'relative'}}>
-                        <Image style={{width: 45, height: 45, borderRadius: 50, objectFit: 'cover'}} source={{uri: USER_IMAGE_URL + thread.author_image}}/>   
+                        <Image style={{width: 45, height: 45, borderRadius: 50, objectFit: 'cover'}} source={userImage}/>   
                         {!subscribed &&
                         <View style={{backgroundColor: 'white', paddingLeft: 1.7, borderRadius: 50, position: 'absolute', top: 30, right: -5}}>
                             <Icon size={22} style={{}} name='add-circle'/>
@@ -71,7 +72,7 @@ const Thread = memo(({thread, displayReply, navigation, addLike}) => {
                     <ThreadElement/>
                     <PreviewImages>
                         {thread.comments.preview_images.map((image, i) => (
-                            <Image key={i} style={{position: 'absolute',marginHorizontal: 13, left: (8 * i), width: 15, height: 15, borderRadius: 7.5}} source={{uri: `${USER_IMAGE_URL + image.image}`}}/>
+                            <Image key={i} style={{position: 'absolute',marginHorizontal: 13, left: (8 * i), width: 15, height: 15, borderRadius: 7.5, backgroundColor: '#fff'}} source={image.image ? {uri: `${USER_IMAGE_URL + image.image}`} : require('../../../assets/default-user-image.png')}/>
                         ))}
                     </PreviewImages>
                     </>
